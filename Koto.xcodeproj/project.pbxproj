@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E703A6BA2C97157F00C72F87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E703A6B92C97157F00C72F87 /* Assets.xcassets */; };
 		E703A6BD2C97157F00C72F87 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E703A6BC2C97157F00C72F87 /* Preview Assets.xcassets */; };
+		E703A6C62C97170100C72F87 /* ja.svg in Resources */ = {isa = PBXBuildFile; fileRef = E703A6C52C97170100C72F87 /* ja.svg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -16,6 +17,7 @@
 		E703A6B92C97157F00C72F87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E703A6BC2C97157F00C72F87 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E703A6BE2C97157F00C72F87 /* Koto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Koto.entitlements; sourceTree = "<group>"; };
+		E703A6C52C97170100C72F87 /* ja.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ja.svg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 		E703A6C42C9716E000C72F87 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E703A6C52C97170100C72F87 /* ja.svg */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -129,6 +132,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E703A6C62C97170100C72F87 /* ja.svg in Resources */,
 				E703A6BD2C97157F00C72F87 /* Preview Assets.xcassets in Resources */,
 				E703A6BA2C97157F00C72F87 /* Assets.xcassets in Resources */,
 			);
