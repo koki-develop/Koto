@@ -7,16 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E703A6B62C97157E00C72F87 /* KotoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E703A6B52C97157E00C72F87 /* KotoApp.swift */; };
-		E703A6B82C97157E00C72F87 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E703A6B72C97157E00C72F87 /* ContentView.swift */; };
 		E703A6BA2C97157F00C72F87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E703A6B92C97157F00C72F87 /* Assets.xcassets */; };
 		E703A6BD2C97157F00C72F87 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E703A6BC2C97157F00C72F87 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E703A6B22C97157E00C72F87 /* Koto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Koto.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E703A6B52C97157E00C72F87 /* KotoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KotoApp.swift; sourceTree = "<group>"; };
-		E703A6B72C97157E00C72F87 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E703A6B92C97157F00C72F87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E703A6BC2C97157F00C72F87 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E703A6BE2C97157F00C72F87 /* Koto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Koto.entitlements; sourceTree = "<group>"; };
@@ -52,8 +48,6 @@
 		E703A6B42C97157E00C72F87 /* Koto */ = {
 			isa = PBXGroup;
 			children = (
-				E703A6B52C97157E00C72F87 /* KotoApp.swift */,
-				E703A6B72C97157E00C72F87 /* ContentView.swift */,
 				E703A6B92C97157F00C72F87 /* Assets.xcassets */,
 				E703A6BE2C97157F00C72F87 /* Koto.entitlements */,
 				E703A6BB2C97157F00C72F87 /* Preview Content */,
@@ -139,8 +133,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E703A6B82C97157E00C72F87 /* ContentView.swift in Sources */,
-				E703A6B62C97157E00C72F87 /* KotoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
