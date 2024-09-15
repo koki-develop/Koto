@@ -1,0 +1,17 @@
+version: '3'
+
+tasks:
+  build:
+    silent: true
+    cmds:
+      - xcodebuild -project ./Koto.xcodeproj -configuration Debug
+  install:
+    silent: true
+    deps: [build]
+    cmds:
+      - cp -R ./build/Debug/Koto.app ~/Library/Input\ Methods
+      - task: stop
+  stop:
+    silent: true
+    cmds:
+      - pkill Koto
