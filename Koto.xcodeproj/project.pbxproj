@@ -18,6 +18,7 @@
 		E703A6BC2C97157F00C72F87 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E703A6BE2C97157F00C72F87 /* Koto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Koto.entitlements; sourceTree = "<group>"; };
 		E703A6C52C97170100C72F87 /* ja.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ja.svg; sourceTree = "<group>"; };
+		E703A6C72C97173600C72F87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +51,7 @@
 		E703A6B42C97157E00C72F87 /* Koto */ = {
 			isa = PBXGroup;
 			children = (
+				E703A6C72C97173600C72F87 /* Info.plist */,
 				E703A6C42C9716E000C72F87 /* Resources */,
 				E703A6B92C97157F00C72F87 /* Assets.xcassets */,
 				E703A6BE2C97157F00C72F87 /* Koto.entitlements */,
@@ -283,6 +285,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Koto/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -310,6 +313,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Koto/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
