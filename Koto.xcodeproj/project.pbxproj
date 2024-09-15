@@ -51,6 +51,7 @@
 		E703A6B42C97157E00C72F87 /* Koto */ = {
 			isa = PBXGroup;
 			children = (
+				E703A6C82C97175900C72F87 /* Sources */,
 				E703A6C72C97173600C72F87 /* Info.plist */,
 				E703A6C42C9716E000C72F87 /* Resources */,
 				E703A6B92C97157F00C72F87 /* Assets.xcassets */,
@@ -74,6 +75,13 @@
 				E703A6C52C97170100C72F87 /* ja.svg */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		E703A6C82C97175900C72F87 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
