@@ -48,6 +48,7 @@
 		E703A6B42C97157E00C72F87 /* Koto */ = {
 			isa = PBXGroup;
 			children = (
+				E703A6C42C9716E000C72F87 /* Resources */,
 				E703A6B92C97157F00C72F87 /* Assets.xcassets */,
 				E703A6BE2C97157F00C72F87 /* Koto.entitlements */,
 				E703A6BB2C97157F00C72F87 /* Preview Content */,
@@ -61,6 +62,13 @@
 				E703A6BC2C97157F00C72F87 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		E703A6C42C9716E000C72F87 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
