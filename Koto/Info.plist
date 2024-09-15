@@ -6,6 +6,8 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)_Connection</string>
 	<key>InputMethodServerControllerClass</key>
 	<string>$(PRODUCT_MODULE_NAME).KotoInputController</string>
+	<key>TISIntendedLanguage</key>
+	<string>ja</string>
 	<key>tsInputMethodIconFileKey</key>
 	<string>ja.svg</string>
 </dict>
