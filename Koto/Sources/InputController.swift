@@ -39,9 +39,10 @@ class KotoInputController: IMKInputController {
 
     case (.backspace, .composing):
       self.composingText.deleteBackwardFromCursorPosition(count: 1)
-      self.setMarkedText(self.composingText.convertTarget)
       if self.composingText.isEmpty {
-        self.state = .normal
+        self.clear()
+      } else {
+        self.setMarkedText(self.composingText.convertTarget)
       }
       return true
 
