@@ -27,7 +27,7 @@ class KotoInputController: IMKInputController {
       self.state = .composing
       fallthrough
     case (.input(let text), .composing):
-      self.composingText.insertAtCursorPosition(text, inputStyle: .roman2kana)
+      self.composingText.append(text)
       self.setMarkedText(self.composingText.convertTarget)
       return true
 
