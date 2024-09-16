@@ -47,10 +47,7 @@ class KotoInputController: IMKInputController {
 
     case (.enter, .composing):
       self.insertText(self.composingText.convertTarget)
-      self.setMarkedText("")
-      self.hideCandidates()
-      self.state = .normal
-      self.composingText = ComposingText()
+      self.clear()
       return true
 
     default:
@@ -96,5 +93,12 @@ class KotoInputController: IMKInputController {
     }
     let range = NSRange(location: NSNotFound, length: NSNotFound)
     client.setMarkedText(text, selectionRange: range, replacementRange: range)
+  }
+
+  private func clear() {
+    self.setMarkedText("")
+    self.hideCandidates()
+    self.state = .normal
+    self.composingText = ComposingText()
   }
 }
