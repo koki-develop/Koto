@@ -10,10 +10,14 @@ import KanaKanjiConverterModule
 
 @objc(KotoInputController)
 class KotoInputController: IMKInputController {
+  let candidates: IMKCandidates
+
   var state: InputState = .normal
   var composingText: ComposingText = ComposingText()
 
   override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
+    self.candidates = IMKCandidates(
+      server: server, panelType: kIMKSingleColumnScrollingCandidatePanel)
     super.init(server: server, delegate: delegate, client: inputClient)
   }
 
