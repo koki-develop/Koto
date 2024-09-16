@@ -9,6 +9,8 @@ import InputMethodKit
 
 @objc(KotoInputController)
 class KotoInputController: IMKInputController {
+  private let inputSubject 
+
   override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
     super.init(server: server, delegate: delegate, client: inputClient)
   }
