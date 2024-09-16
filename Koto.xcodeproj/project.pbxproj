@@ -12,6 +12,7 @@
 		E703A6C62C97170100C72F87 /* ja.svg in Resources */ = {isa = PBXBuildFile; fileRef = E703A6C52C97170100C72F87 /* ja.svg */; };
 		E703A6CD2C9717C600C72F87 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = E703A6CC2C9717C600C72F87 /* App.swift */; };
 		E703A6CF2C97184E00C72F87 /* InputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E703A6CE2C97184E00C72F87 /* InputController.swift */; };
+		E746EF032C97FA7600E05D92 /* EventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E746EF022C97FA7600E05D92 /* EventType.swift */; };
 		E7E6D3C32C971E9700DC00CC /* KanaKanjiConverterModule in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C22C971E9700DC00CC /* KanaKanjiConverterModule */; };
 		E7E6D3C52C971E9700DC00CC /* KanaKanjiConverterModuleWithDefaultDictionary in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C42C971E9700DC00CC /* KanaKanjiConverterModuleWithDefaultDictionary */; };
 		E7E6D3C72C971E9700DC00CC /* SwiftUtils in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C62C971E9700DC00CC /* SwiftUtils */; };
@@ -26,6 +27,7 @@
 		E703A6C72C97173600C72F87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E703A6CC2C9717C600C72F87 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		E703A6CE2C97184E00C72F87 /* InputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputController.swift; sourceTree = "<group>"; };
+		E746EF022C97FA7600E05D92 /* EventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +94,7 @@
 			children = (
 				E703A6CC2C9717C600C72F87 /* App.swift */,
 				E703A6CE2C97184E00C72F87 /* InputController.swift */,
+				E746EF022C97FA7600E05D92 /* EventType.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -177,6 +180,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E703A6CF2C97184E00C72F87 /* InputController.swift in Sources */,
+				E746EF032C97FA7600E05D92 /* EventType.swift in Sources */,
 				E703A6CD2C9717C600C72F87 /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
