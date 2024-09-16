@@ -16,6 +16,7 @@
 		E77175832C97FD5F0055553D /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77175822C97FD5E0055553D /* Input.swift */; };
 		E77175852C97FE7D0055553D /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = E77175842C97FE7D0055553D /* RxCocoa */; };
 		E77175872C97FE7D0055553D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E77175862C97FE7D0055553D /* RxSwift */; };
+		E77175892C97FF960055553D /* InputState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77175882C97FF960055553D /* InputState.swift */; };
 		E7E6D3C32C971E9700DC00CC /* KanaKanjiConverterModule in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C22C971E9700DC00CC /* KanaKanjiConverterModule */; };
 		E7E6D3C52C971E9700DC00CC /* KanaKanjiConverterModuleWithDefaultDictionary in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C42C971E9700DC00CC /* KanaKanjiConverterModuleWithDefaultDictionary */; };
 		E7E6D3C72C971E9700DC00CC /* SwiftUtils in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C62C971E9700DC00CC /* SwiftUtils */; };
@@ -32,6 +33,7 @@
 		E703A6CE2C97184E00C72F87 /* InputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputController.swift; sourceTree = "<group>"; };
 		E746EF022C97FA7600E05D92 /* EventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventType.swift; sourceTree = "<group>"; };
 		E77175822C97FD5E0055553D /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
+		E77175882C97FF960055553D /* InputState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				E703A6CE2C97184E00C72F87 /* InputController.swift */,
 				E746EF022C97FA7600E05D92 /* EventType.swift */,
 				E77175822C97FD5E0055553D /* Input.swift */,
+				E77175882C97FF960055553D /* InputState.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -191,6 +194,7 @@
 			files = (
 				E703A6CF2C97184E00C72F87 /* InputController.swift in Sources */,
 				E746EF032C97FA7600E05D92 /* EventType.swift in Sources */,
+				E77175892C97FF960055553D /* InputState.swift in Sources */,
 				E77175832C97FD5F0055553D /* Input.swift in Sources */,
 				E703A6CD2C9717C600C72F87 /* App.swift in Sources */,
 			);
