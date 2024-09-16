@@ -6,10 +6,11 @@
 //
 
 import InputMethodKit
-import KanaKanjiConverterModule
+import KanaKanjiConverterModuleWithDefaultDictionary
 
 @objc(KotoInputController)
 class KotoInputController: IMKInputController {
+  @MainActor let converter = KanaKanjiConverter()
   let candidates: IMKCandidates
 
   var state: InputState = .normal
@@ -33,6 +34,7 @@ class KotoInputController: IMKInputController {
     case (.input(let text), .composing):
       self.composingText.append(text)
       self.setMarkedText(self.composingText.convertTarget)
+      self.showCandidates()
       return true
 
     case (.backspace, .composing):
@@ -46,6 +48,7 @@ class KotoInputController: IMKInputController {
     case (.enter, .composing):
       self.insertText(self.composingText.convertTarget)
       self.setMarkedText("")
+      self.hideCandidates()
       self.state = .normal
       self.composingText = ComposingText()
       return true
@@ -53,6 +56,31 @@ class KotoInputController: IMKInputController {
     default:
       return false
     }
+  }
+
+  @MainActor override func candidates(_ sender: Any!) -> [Any]! {
+    let results = self.converter.requestCandidates(
+      self.composingText,
+      options: .withDefaultDictionary(
+        requireJapanesePrediction: true,
+        requireEnglishPrediction: false,
+        keyboardLanguage:  .ja_JP,
+        learningType: .nothing,
+        memoryDirectoryURL: .documentsDirectory,
+        sharedContainerURL: .documentsDirectory,
+        metadata: .init(appVersionString: "dev")
+      )
+    )
+    return results.mainResults.map { $0.text }
+  }
+
+  private func showCandidates() {
+    self.candidates.update()
+    self.candidates.show()
+  }
+
+  private func hideCandidates() {
+    self.candidates.hide()
   }
 
   private func insertText(_ text: String) {
