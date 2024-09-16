@@ -151,6 +151,7 @@
 			mainGroup = E703A6A92C97157E00C72F87;
 			packageReferences = (
 				E7E6D3C12C971E9700DC00CC /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */,
+				E746EF042C97FC1F00E05D92 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			productRefGroup = E703A6B32C97157E00C72F87 /* Products */;
 			projectDirPath = "";
@@ -393,6 +394,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E746EF042C97FC1F00E05D92 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = exactVersion;
+				version = 6.7.1;
+			};
+		};
 		E7E6D3C12C971E9700DC00CC /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter";
