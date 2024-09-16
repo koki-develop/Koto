@@ -65,7 +65,7 @@ class KotoInputController: IMKInputController {
       options: .withDefaultDictionary(
         requireJapanesePrediction: true,
         requireEnglishPrediction: false,
-        keyboardLanguage:  .ja_JP,
+        keyboardLanguage: .ja_JP,
         learningType: .nothing,
         memoryDirectoryURL: .documentsDirectory,
         sharedContainerURL: .documentsDirectory,
