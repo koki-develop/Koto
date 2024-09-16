@@ -20,3 +20,7 @@ tasks:
     silent: true
     cmds:
       - pkill Koto
+
+  fmt:
+    silent: true
+    cmd: swift-format format --recursive --in-place .
