@@ -9,6 +9,7 @@ import AppKit
 
 enum EventType {
   case enter
+  case space
   case backspace
   case input(_ text: String)
 }
@@ -17,6 +18,8 @@ func getEventType(_ event: NSEvent) -> EventType? {
   switch event.keyCode {
   case 36:
     return .enter
+  case 49:
+    return .space
   case 51:
     return .backspace
   default:
