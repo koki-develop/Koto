@@ -71,6 +71,10 @@ class KotoInputController: IMKInputController {
     return results.mainResults.map { $0.text }
   }
 
+  override func deactivateServer(_ sender: Any!) {
+    self.clear()
+  }
+
   private func showCandidates() {
     self.candidates.update()
     self.candidates.show()
