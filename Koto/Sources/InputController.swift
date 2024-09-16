@@ -49,6 +49,10 @@ class KotoInputController: IMKInputController {
       }
       return true
 
+    case (.space, .normal):
+      self.insertText("　")
+      return true
+
     case (.enter, .composing):
       self.insertText(self.composingText.convertTarget)
       self.clear()
