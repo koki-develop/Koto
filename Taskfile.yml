@@ -4,7 +4,12 @@ tasks:
   build:
     silent: true
     cmds:
-      - xcodebuild -project ./Koto.xcodeproj -configuration Debug
+      - |-
+        xcodebuild \
+          -project ./Koto.xcodeproj \
+          -scheme Koto \
+          -configuration Debug \
+          CONFIGURATION_BUILD_DIR="$(pwd)/build/\$(CONFIGURATION)"
   install:
     silent: true
     deps: [build]
