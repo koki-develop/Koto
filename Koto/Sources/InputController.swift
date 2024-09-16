@@ -31,6 +31,14 @@ class KotoInputController: IMKInputController {
       self.setMarkedText(self.composingText.convertTarget)
       return true
 
+    case (.backspace, .composing):
+      self.composingText.deleteBackwardFromCursorPosition(count: 1)
+      self.setMarkedText(self.composingText.convertTarget)
+      if self.composingText.isEmpty {
+        self.state = .normal
+      }
+      return true
+
     case (.enter, .composing):
       self.insertText(self.composingText.convertTarget)
       self.setMarkedText("")
