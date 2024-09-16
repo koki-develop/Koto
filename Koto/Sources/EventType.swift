@@ -8,10 +8,18 @@
 import AppKit
 
 enum EventType {
+  case enter
   case input(_ text: String)
 }
 
 func getEventType(_ event: NSEvent) -> EventType? {
+  switch event.keyCode {
+  case 36:
+    return .enter
+  default:
+    break
+  }
+
   if let text = event.characters, isPrintable(text) {
     return .input(text)
   }
