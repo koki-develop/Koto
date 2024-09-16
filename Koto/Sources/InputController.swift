@@ -15,6 +15,7 @@ class KotoInputController: IMKInputController {
 
   var state: InputState = .normal
   var composingText: ComposingText = ComposingText()
+  var previewText: String = ""
 
   override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
     self.candidates = IMKCandidates(
@@ -33,16 +34,18 @@ class KotoInputController: IMKInputController {
       fallthrough
     case (.input(let text), .composing):
       self.composingText.append(text)
-      self.setMarkedText(self.composingText.convertTarget)
+      self.previewText.append(text)
+      self.setMarkedText(self.previewText)
       self.showCandidates()
       return true
 
     case (.backspace, .composing):
       self.composingText.deleteBackwardFromCursorPosition(count: 1)
+      self.previewText.removeLast()
       if self.composingText.isEmpty {
         self.clear()
       } else {
-        self.setMarkedText(self.composingText.convertTarget)
+        self.setMarkedText(self.previewText)
       }
       return true
 
@@ -105,5 +108,6 @@ class KotoInputController: IMKInputController {
     self.hideCandidates()
     self.state = .normal
     self.composingText = ComposingText()
+    self.previewText = ""
   }
 }
