@@ -58,6 +58,10 @@ func getEventType(_ event: NSEvent) -> EventType? {
     break
   }
 
+  if event.modifierFlags.contains(.control) {
+    return .ignore
+  }
+
   if let text = event.characters, isPrintable(text) {
     return .input(text)
   }
