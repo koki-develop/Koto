@@ -47,7 +47,7 @@ func getEventType(_ event: NSEvent) -> EventType? {
     }
     break
 
-  case 123, 124: // ←→
+  case 123, 124:  // ←→
     return .ignore
   case 125:
     return .down
