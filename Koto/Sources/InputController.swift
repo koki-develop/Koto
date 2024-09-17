@@ -15,6 +15,7 @@ class KotoInputController: IMKInputController {
 
   var state: InputState = .normal
   var composingText: ComposingText = ComposingText()
+  var candidateTexts: [Candidate] = []
 
   override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
     self.candidates = IMKCandidates(
@@ -22,6 +23,7 @@ class KotoInputController: IMKInputController {
     super.init(server: server, delegate: delegate, client: inputClient)
   }
 
+  @MainActor
   override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
     guard let eventType = getEventType(event) else {
       return false
@@ -58,7 +60,7 @@ class KotoInputController: IMKInputController {
       self.insertText("　")
       return true
     case (.space, .composing):
-      self.candidates.update()
+      self.updateCandidates()
       self.candidates.show()
       return true
     case (.space, .selecting):
@@ -78,7 +80,16 @@ class KotoInputController: IMKInputController {
     }
   }
 
-  @MainActor override func candidates(_ sender: Any!) -> [Any]! {
+  override func candidates(_ sender: Any!) -> [Any]! {
+    return self.candidateTexts.map { $0.text }
+  }
+
+  override func deactivateServer(_ sender: Any!) {
+    self.clear()
+  }
+
+  @MainActor
+  private func updateCandidates() {
     let results = self.converter.requestCandidates(
       self.composingText,
       options: .withDefaultDictionary(
@@ -91,11 +102,8 @@ class KotoInputController: IMKInputController {
         metadata: .init(appVersionString: "dev")
       )
     )
-    return results.mainResults.map { $0.text }
-  }
-
-  override func deactivateServer(_ sender: Any!) {
-    self.clear()
+    self.candidateTexts = results.mainResults
+    self.candidates.update()
   }
 
   private func insertText(_ text: String) {
