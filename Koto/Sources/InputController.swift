@@ -66,9 +66,9 @@ class KotoInputController: IMKInputController {
       return true
 
     case (.space, .composing):
-      self.state = .selecting
       self.candidates.update()
       self.candidates.show()
+      self.state = .selecting
       return true
 
     case (.space, .selecting):
@@ -78,6 +78,16 @@ class KotoInputController: IMKInputController {
     case (.enter, .composing):
       self.insertComposingText()
       self.clear()
+      return true
+
+    case (.esc, .composing):
+      self.clear()
+      return true
+
+    case (.esc, .selecting):
+      self.setComposingMarkedText()
+      self.state = .composing
+      self.candidates.hide()
       return true
 
     case (.enter, .selecting), (.down, .selecting), (.up, .selecting):
