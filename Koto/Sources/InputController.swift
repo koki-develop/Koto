@@ -97,7 +97,7 @@ class KotoInputController: IMKInputController {
       self.candidates.interpretKeyEvents([event])
       return true
 
-    case (.left, _), (.right, _):
+    case (.ignore, .composing), (.ignore, .selecting):
       return true
 
     default:

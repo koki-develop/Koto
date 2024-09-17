@@ -8,13 +8,13 @@
 import AppKit
 
 enum EventType {
+  case ignore
+
   case enter
   case space
   case backspace
   case esc
 
-  case left
-  case right
   case down
   case up
 
@@ -47,10 +47,8 @@ func getEventType(_ event: NSEvent) -> EventType? {
     }
     break
 
-  case 123:
-    return .left
-  case 124:
-    return .right
+  case 123, 124: // ←→
+    return .ignore
   case 125:
     return .down
   case 126:
