@@ -22,6 +22,10 @@ enum EventType {
 }
 
 func getEventType(_ event: NSEvent) -> EventType? {
+  if event.modifierFlags.contains(.command) {
+    return nil
+  }
+
   switch event.keyCode {
   case 36:
     return .enter
