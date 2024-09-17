@@ -104,7 +104,6 @@
 				E746EF022C97FA7600E05D92 /* EventType.swift */,
 				E77175822C97FD5E0055553D /* Input.swift */,
 				E77175882C97FF960055553D /* InputState.swift */,
-				E771758A2C986B150055553D /* ComposingText.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -112,6 +111,7 @@
 		E77682242C99A92C00E23949 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				E771758A2C986B150055553D /* ComposingText.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
