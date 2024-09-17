@@ -1,0 +1,44 @@
+name: Release
+run-name: Release ${{ github.ref_name}}
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project ./Koto.xcodeproj \
+            -scheme Koto \
+            -configuration Release \
+            CONFIGURATION_BUILD_DIR="$(pwd)/build/\$(CONFIGURATION)" \
+            CODE_SIGNING_ALLOWED=NO
+          mkdir -p ./tmp/app
+          mv ./build/Release/Koto.app ./tmp/app/
+
+      - name: Build Package
+        run: |
+          xcrun pkgbuild \
+            --root ./tmp/app \
+            --component-plist ./pkg.plist \
+            --identifier me.koki.inputmethod.Koto \
+            --install-location '/Library/Input Methods' \
+            ./tmp/tmp.pkg
+
+      - name: Build Installer
+        run: |
+          xcrun productbuild \
+            --distribution distribution.xml \
+            --package-path ./tmp \
+            ./tmp/Koto.pkg
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Koto.pkg
+          path: ./tmp/Koto.pkg
