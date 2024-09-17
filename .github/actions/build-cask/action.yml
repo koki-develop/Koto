@@ -1,5 +1,5 @@
 name: Build Cask
-description: ""
+description: Build Homebrew Cask for Koto
 
 inputs:
   version:
