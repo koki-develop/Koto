@@ -15,8 +15,13 @@ tasks:
     silent: true
     deps: [build]
     cmds:
-      - rm -rf ~/Library/Input\ Methods/Koto.app
       - cp -R ./build/Debug/Koto.app ~/Library/Input\ Methods
+
+  uninstall:
+    silent: true
+    cmds:
+      - rm -rf ~/Library/Input\ Methods/Koto.app
+      - task: stop
 
   stop:
     silent: true
