@@ -1,0 +1,45 @@
+name: Build Cask
+description: ""
+
+inputs:
+  version:
+    required: true
+    description: ""
+  sha256:
+    required: true
+    description: ""
+  desc:
+    required: true
+    description: ""
+  output-path:
+    required: true
+    description: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Build Cask
+      shell: bash
+      env:
+        KOTO_REPO: ${{ github.repository }}
+        KOTO_VERSION: ${{ inputs.version }}
+        KOTO_SHA256: ${{ inputs.sha256 }}
+        KOTO_DESC: ${{ inputs.desc }}
+        KOTO_OUTPUT_PATH: ${{ inputs.output-path }}
+      run: |
+        cat <<EOF > $KOTO_OUTPUT_PATH
+        cask "koto" do
+          version "${KOTO_VERSION}"
+          url "https://github.com/${KOTO_REPO}/releases/download/v#{version}/Koto.pkg"
+          sha256 "${KOTO_SHA256}"
+
+          name "Koto"
+          desc "${KOTO_DESC}"
+          homepage "https://github.com/${KOTO_REPO}"
+
+          pkg "Koto.pkg"
+          uninstall pkgutil: "me.koki.inputmethod.Koto"
+        end
+        EOF
+
+        cat $KOTO_OUTPUT_PATH
