@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		E703A6BA2C97157F00C72F87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E703A6B92C97157F00C72F87 /* Assets.xcassets */; };
 		E703A6BD2C97157F00C72F87 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E703A6BC2C97157F00C72F87 /* Preview Assets.xcassets */; };
-		E703A6C62C97170100C72F87 /* ja.svg in Resources */ = {isa = PBXBuildFile; fileRef = E703A6C52C97170100C72F87 /* ja.svg */; };
 		E703A6CD2C9717C600C72F87 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = E703A6CC2C9717C600C72F87 /* App.swift */; };
 		E703A6CF2C97184E00C72F87 /* InputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E703A6CE2C97184E00C72F87 /* InputController.swift */; };
+		E71AA8AA2C9A291900BC5468 /* ja.png in Resources */ = {isa = PBXBuildFile; fileRef = E71AA8A92C9A291900BC5468 /* ja.png */; };
 		E746EF032C97FA7600E05D92 /* EventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E746EF022C97FA7600E05D92 /* EventType.swift */; };
 		E77175832C97FD5F0055553D /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77175822C97FD5E0055553D /* Input.swift */; };
 		E77175892C97FF960055553D /* InputState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77175882C97FF960055553D /* InputState.swift */; };
@@ -28,10 +28,10 @@
 		E703A6B92C97157F00C72F87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E703A6BC2C97157F00C72F87 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E703A6BE2C97157F00C72F87 /* Koto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Koto.entitlements; sourceTree = "<group>"; };
-		E703A6C52C97170100C72F87 /* ja.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ja.svg; sourceTree = "<group>"; };
 		E703A6C72C97173600C72F87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E703A6CC2C9717C600C72F87 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		E703A6CE2C97184E00C72F87 /* InputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputController.swift; sourceTree = "<group>"; };
+		E71AA8A92C9A291900BC5468 /* ja.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ja.png; sourceTree = "<group>"; };
 		E746EF022C97FA7600E05D92 /* EventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventType.swift; sourceTree = "<group>"; };
 		E77175822C97FD5E0055553D /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		E77175882C97FF960055553D /* InputState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputState.swift; sourceTree = "<group>"; };
@@ -95,8 +95,8 @@
 		E703A6C42C9716E000C72F87 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E71AA8A92C9A291900BC5468 /* ja.png */,
 				E77682272C99BF9B00E23949 /* zenz-v2-Q5_K_M.gguf */,
-				E703A6C52C97170100C72F87 /* ja.svg */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -189,7 +189,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E703A6C62C97170100C72F87 /* ja.svg in Resources */,
+				E71AA8AA2C9A291900BC5468 /* ja.png in Resources */,
 				E703A6BD2C97157F00C72F87 /* Preview Assets.xcassets in Resources */,
 				E703A6BA2C97157F00C72F87 /* Assets.xcassets in Resources */,
 				E77682282C99BF9B00E23949 /* zenz-v2-Q5_K_M.gguf in Resources */,
@@ -352,7 +352,7 @@
 				INFOPLIST_FILE = Koto/Info.plist;
 				INFOPLIST_KEY_LSBackgroundOnly = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSPrincipalClass = "$(PRODUCT_MODULE_NAME).NSManualApplication";
+				INFOPLIST_KEY_NSPrincipalClass = Koto.NSManualApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -384,7 +384,7 @@
 				INFOPLIST_FILE = Koto/Info.plist;
 				INFOPLIST_KEY_LSBackgroundOnly = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSPrincipalClass = "$(PRODUCT_MODULE_NAME).NSManualApplication";
+				INFOPLIST_KEY_NSPrincipalClass = Koto.NSManualApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
