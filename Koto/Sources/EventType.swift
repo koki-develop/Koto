@@ -36,6 +36,12 @@ func getEventType(_ event: NSEvent) -> EventType? {
   case 53:
     return .esc
 
+  case 4:  // h
+    if event.modifierFlags.contains(.control) {
+      return .backspace
+    }
+    break
+
   case 35:  // p
     if event.modifierFlags.contains(.control) {
       return .up
