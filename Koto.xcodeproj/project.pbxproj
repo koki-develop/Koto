@@ -73,6 +73,7 @@
 				E703A6BE2C97157F00C72F87 /* Koto.entitlements */,
 				E703A6B92C97157F00C72F87 /* Assets.xcassets */,
 				E703A6C82C97175900C72F87 /* Sources */,
+				E77682242C99A92C00E23949 /* Extensions */,
 				E703A6C42C9716E000C72F87 /* Resources */,
 				E703A6BB2C97157F00C72F87 /* Preview Content */,
 			);
@@ -106,6 +107,13 @@
 				E771758A2C986B150055553D /* ComposingText.swift */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		E77682242C99A92C00E23949 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
