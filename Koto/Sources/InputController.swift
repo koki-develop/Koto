@@ -61,7 +61,7 @@ class KotoInputController: IMKInputController {
       return true
     case (.space, .composing):
       self.state = .selecting
-      self.updateCandidates()
+      self.candidates.update()
       self.candidates.show()
       return true
     case (.space, .selecting):
@@ -81,16 +81,8 @@ class KotoInputController: IMKInputController {
     }
   }
 
-  override func candidates(_ sender: Any!) -> [Any]! {
-    return self.candidateTexts.map { $0.text }
-  }
-
-  override func deactivateServer(_ sender: Any!) {
-    self.clear()
-  }
-
   @MainActor
-  private func updateCandidates() {
+  override func candidates(_ sender: Any!) -> [Any]! {
     let results = self.converter.requestCandidates(
       self.composingText,
       options: .withDefaultDictionary(
@@ -104,7 +96,35 @@ class KotoInputController: IMKInputController {
       )
     )
     self.candidateTexts = results.mainResults
-    self.candidates.update()
+    return self.candidateTexts.map { $0.text }
+  }
+
+  override func candidateSelected(_ candidateString: NSAttributedString!) {
+    guard let candidate = candidateTexts.first(where: { $0.text == candidateString.string }) else {
+      return
+    }
+
+    self.insertText(candidate.text)
+    self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
+
+    if self.composingText.isEmpty {
+      self.clear()
+    } else {
+      self.candidates.update()
+    }
+  }
+
+  override func candidateSelectionChanged(_ candidateString: NSAttributedString!) {
+    guard let candidate = candidateTexts.first(where: { $0.text == candidateString.string }) else {
+      return
+    }
+    var afterComposingText = self.composingText
+    afterComposingText.prefixComplete(correspondingCount: candidate.correspondingCount)
+    self.setMarkedText(candidate.text + afterComposingText.convertTarget)
+  }
+
+  override func deactivateServer(_ sender: Any!) {
+    self.clear()
   }
 
   private func insertText(_ text: String) {
