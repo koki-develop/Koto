@@ -32,18 +32,15 @@ class KotoInputController: IMKInputController {
 
     switch (eventType, self.state) {
     case (.input(let text), .selecting):
-      if let candidate = self.selectedCandidateText {
-        self.insertText(candidate.text)
-        self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
-      }
-      if !self.composingText.isEmpty {
-        self.insertText(self.composingText.convertTarget)
-      }
+      self.insertSelectedCandidate()
+      self.insertComposingText()
       self.clear()
       fallthrough
+
     case (.input(let text), .normal):
       self.state = .composing
       fallthrough
+
     case (.input(let text), .composing):
       self.composingText.append(text)
       self.updateComposingMarkedText()
@@ -52,6 +49,7 @@ class KotoInputController: IMKInputController {
     case (.backspace, .normal):
       // do nothing
       return false
+
     case (.backspace, .composing):
       self.composingText.deleteBackwardFromCursorPosition(count: 1)
       if self.composingText.isEmpty {
@@ -60,25 +58,23 @@ class KotoInputController: IMKInputController {
         self.updateComposingMarkedText()
       }
       return true
+
     case (.backspace, .selecting):
-      if let candidate = self.selectedCandidateText {
-        self.insertText(candidate.text)
-        self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
-      }
-      if !self.composingText.isEmpty {
-        self.insertText(self.composingText.convertTarget)
-      }
+      self.insertSelectedCandidate()
+      self.insertComposingText()
       self.clear()
       return false
 
     case (.space, .normal):
       self.insertText("　")
       return true
+
     case (.space, .composing):
       self.state = .selecting
       self.candidates.update()
       self.candidates.show()
       return true
+
     case (.space, .selecting):
       self.candidates.moveDown(sender)
       return true
@@ -86,10 +82,12 @@ class KotoInputController: IMKInputController {
     case (.enter, .normal):
       // do nothing
       return false
+
     case (.enter, .composing):
-      self.insertText(self.composingText.convertTarget)
+      self.insertComposingText()
       self.clear()
       return true
+
     case (.enter, .selecting):
       self.candidates.interpretKeyEvents([event])
       return true
@@ -141,6 +139,13 @@ class KotoInputController: IMKInputController {
     self.clear()
   }
 
+  private func setMarkedText(_ text: Any!) {
+    guard let client = self.client() else {
+      return
+    }
+    client.setMarkedText(text, selectionRange: .notFound, replacementRange: .notFound)
+  }
+
   private func updateComposingMarkedText() {
     let underline =
         self.mark(
@@ -180,11 +185,19 @@ class KotoInputController: IMKInputController {
     client.insertText(text, replacementRange: NSRange(location: NSNotFound, length: NSNotFound))
   }
 
-  private func setMarkedText(_ text: Any!) {
-    guard let client = self.client() else {
+  private func insertComposingText() {
+    if self.composingText.isEmpty {
       return
     }
-    client.setMarkedText(text, selectionRange: .notFound, replacementRange: .notFound)
+    self.insertText(self.composingText.convertTarget)
+  }
+
+  private func insertSelectedCandidate() {
+    guard let candidate = self.selectedCandidateText else {
+      return
+    }
+    self.insertText(candidate.text)
+    self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
   }
 
   private func clear() {
