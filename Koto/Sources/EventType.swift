@@ -20,8 +20,18 @@ enum EventType {
 
 func getEventType(_ event: NSEvent) -> EventType? {
   switch event.keyCode {
+  case 35: // p
+    if event.modifierFlags.contains(.control) {
+      return .up
+    }
+    break
   case 36:
     return .enter
+  case 45: // n
+    if event.modifierFlags.contains(.control) {
+      return .down
+    }
+    break
   case 49:
     return .space
   case 51:
