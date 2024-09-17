@@ -57,7 +57,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: Koto.pkg
-          path: ./tmp/Koto.pkg
+          path: ./tmp
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
