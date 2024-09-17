@@ -143,10 +143,10 @@ class KotoInputController: IMKInputController {
 
   private func setComposingMarkedText() {
     let underline =
-        self.mark(
-            forStyle: kTSMHiliteConvertedText,
-            at: .notFound
-        ) as? [NSAttributedString.Key: Any]
+      self.mark(
+        forStyle: kTSMHiliteConvertedText,
+        at: .notFound
+      ) as? [NSAttributedString.Key: Any]
     self.setMarkedText(NSAttributedString(string: self.composingText.convertTarget))
   }
 
@@ -159,13 +159,13 @@ class KotoInputController: IMKInputController {
     afterComposingText.prefixComplete(correspondingCount: candidate.correspondingCount)
 
     let highlight =
-    self.mark(forStyle: kTSMHiliteSelectedConvertedText, at: .notFound)
-        as? [NSAttributedString.Key: Any]
+      self.mark(forStyle: kTSMHiliteSelectedConvertedText, at: .notFound)
+      as? [NSAttributedString.Key: Any]
     let underline =
-        self.mark(
-            forStyle: kTSMHiliteConvertedText,
-            at: .notFound
-        ) as? [NSAttributedString.Key: Any]
+      self.mark(
+        forStyle: kTSMHiliteConvertedText,
+        at: .notFound
+      ) as? [NSAttributedString.Key: Any]
 
     let text = NSMutableAttributedString(string: "")
     text.append(NSAttributedString(string: candidate.text, attributes: highlight))

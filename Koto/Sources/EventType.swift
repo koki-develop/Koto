@@ -26,9 +26,9 @@ func getEventType(_ event: NSEvent) -> EventType? {
   case 51:
     return .backspace
   case 125:
-      return .down
+    return .down
   case 126:
-      return .up
+    return .up
   default:
     break
   }
