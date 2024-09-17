@@ -46,10 +46,6 @@ class KotoInputController: IMKInputController {
       self.setComposingMarkedText()
       return true
 
-    case (.backspace, .normal):
-      // do nothing
-      return false
-
     case (.backspace, .composing):
       self.composingText.deleteBackwardFromCursorPosition(count: 1)
       if self.composingText.isEmpty {
@@ -79,18 +75,17 @@ class KotoInputController: IMKInputController {
       self.candidates.moveDown(sender)
       return true
 
-    case (.enter, .normal):
-      // do nothing
-      return false
-
     case (.enter, .composing):
       self.insertComposingText()
       self.clear()
       return true
 
-    case (.enter, .selecting):
+    case (.enter, .selecting), (.down, .selecting), (.up, .selecting):
       self.candidates.interpretKeyEvents([event])
       return true
+
+    default:
+      return false
     }
   }
 
