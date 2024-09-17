@@ -1,0 +1,3 @@
+[submodule "Koto/Resources/zenz-v2-gguf"]
+	path = Koto/Resources/zenz-v2-gguf
+	url = https://huggingface.co/Miwa-Keita/zenz-v2-gguf
