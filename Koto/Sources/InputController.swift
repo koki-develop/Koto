@@ -37,7 +37,6 @@ class KotoInputController: IMKInputController {
     case (.input(let text), .composing):
       self.composingText.append(text)
       self.setMarkedText(self.composingText.convertTarget)
-      self.showCandidates()
       return true
 
     case (.backspace, .normal):
@@ -59,7 +58,8 @@ class KotoInputController: IMKInputController {
       self.insertText("　")
       return true
     case (.space, .composing):
-      // TODO: implement
+      self.candidates.update()
+      self.candidates.show()
       return true
     case (.space, .selecting):
       // TODO: implement
@@ -98,15 +98,6 @@ class KotoInputController: IMKInputController {
     self.clear()
   }
 
-  private func showCandidates() {
-    self.candidates.update()
-    self.candidates.show()
-  }
-
-  private func hideCandidates() {
-    self.candidates.hide()
-  }
-
   private func insertText(_ text: String) {
     guard let client = self.client() else {
       return
@@ -124,7 +115,7 @@ class KotoInputController: IMKInputController {
 
   private func clear() {
     self.setMarkedText("")
-    self.hideCandidates()
+    self.candidates.hide()
     self.state = .normal
     self.composingText = ComposingText()
   }
