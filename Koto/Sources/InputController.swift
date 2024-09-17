@@ -60,6 +60,7 @@ class KotoInputController: IMKInputController {
       self.insertText("　")
       return true
     case (.space, .composing):
+      self.state = .selecting
       self.updateCandidates()
       self.candidates.show()
       return true
