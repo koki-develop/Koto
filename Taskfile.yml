@@ -10,12 +10,14 @@ tasks:
           -scheme Koto \
           -configuration Debug \
           CONFIGURATION_BUILD_DIR="$(pwd)/build/\$(CONFIGURATION)"
+
   install:
     silent: true
     deps: [build]
     cmds:
+      - rm -rf ~/Library/Input\ Methods/Koto.app
       - cp -R ./build/Debug/Koto.app ~/Library/Input\ Methods
-      - task: stop
+
   stop:
     silent: true
     cmds:
