@@ -43,7 +43,7 @@ class KotoInputController: IMKInputController {
 
     case (.input(let text), .composing):
       self.composingText.append(text)
-      self.updateComposingMarkedText()
+      self.setComposingMarkedText()
       return true
 
     case (.backspace, .normal):
@@ -55,7 +55,7 @@ class KotoInputController: IMKInputController {
       if self.composingText.isEmpty {
         self.clear()
       } else {
-        self.updateComposingMarkedText()
+        self.setComposingMarkedText()
       }
       return true
 
@@ -132,7 +132,7 @@ class KotoInputController: IMKInputController {
       return
     }
     self.selectedCandidateText = candidate
-    self.updateSelectingMarkedText()
+    self.setSelectingMarkedText()
   }
 
   override func deactivateServer(_ sender: Any!) {
@@ -146,7 +146,7 @@ class KotoInputController: IMKInputController {
     client.setMarkedText(text, selectionRange: .notFound, replacementRange: .notFound)
   }
 
-  private func updateComposingMarkedText() {
+  private func setComposingMarkedText() {
     let underline =
         self.mark(
             forStyle: kTSMHiliteConvertedText,
@@ -155,7 +155,7 @@ class KotoInputController: IMKInputController {
     self.setMarkedText(NSAttributedString(string: self.composingText.convertTarget))
   }
 
-  private func updateSelectingMarkedText() {
+  private func setSelectingMarkedText() {
     guard let candidate = self.selectedCandidateText else {
       return
     }
