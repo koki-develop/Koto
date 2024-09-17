@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="1">
+    <pkg-ref id="me.koki.inputmethod.Koto"/>
+    <options customize="never" require-scripts="false" hostArchitectures="x86_64,arm64"/>
+    <choices-outline>
+        <line choice="default">
+            <line choice="me.koki.inputmethod.Koto"/>
+        </line>
+    </choices-outline>
+    <choice id="default"/>
+    <choice id="me.koki.inputmethod.Koto" visible="false">
+        <pkg-ref id="me.koki.inputmethod.Koto"/>
+    </choice>
+    <pkg-ref id="me.koki.inputmethod.Koto" version="0" onConclusion="none">tmp.pkg</pkg-ref>
+</installer-gui-script>
