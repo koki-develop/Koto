@@ -64,7 +64,7 @@ class KotoInputController: IMKInputController {
       self.candidates.show()
       return true
     case (.space, .selecting):
-      // TODO: implement
+      self.candidates.moveDown(sender)
       return true
 
     case (.enter, .normal):
@@ -75,7 +75,7 @@ class KotoInputController: IMKInputController {
       self.clear()
       return true
     case (.enter, .selecting):
-      // TODO: implement
+      self.candidates.interpretKeyEvents([event])
       return true
     }
   }
