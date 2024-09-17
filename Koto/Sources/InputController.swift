@@ -32,8 +32,15 @@ class KotoInputController: IMKInputController {
 
     switch (eventType, self.state) {
     case (.input(let text), .selecting):
-      // TODO: implement
-      return true
+      if let candidate = self.selectedCandidateText {
+        self.insertText(candidate.text)
+        self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
+      }
+      if !self.composingText.isEmpty {
+        self.insertText(self.composingText.convertTarget)
+      }
+      self.clear()
+      fallthrough
     case (.input(let text), .normal):
       self.state = .composing
       fallthrough
