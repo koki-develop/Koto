@@ -61,8 +61,15 @@ class KotoInputController: IMKInputController {
       }
       return true
     case (.backspace, .selecting):
-      // TODO: implement
-      return true
+      if let candidate = self.selectedCandidateText {
+        self.insertText(candidate.text)
+        self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
+      }
+      if !self.composingText.isEmpty {
+        self.insertText(self.composingText.convertTarget)
+      }
+      self.clear()
+      return false
 
     case (.space, .normal):
       self.insertText("　")
