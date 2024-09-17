@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+extension NSRange {
+  static var notFound: NSRange {
+    NSRange(location: NSNotFound, length: NSNotFound)
+  }
+}
