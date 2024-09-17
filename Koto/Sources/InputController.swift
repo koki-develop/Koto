@@ -16,6 +16,7 @@ class KotoInputController: IMKInputController {
   var state: InputState = .normal
   var composingText: ComposingText = ComposingText()
   var candidateTexts: [Candidate] = []
+  var selectedCandidateText: Candidate?
 
   override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
     self.candidates = IMKCandidates(
@@ -38,7 +39,7 @@ class KotoInputController: IMKInputController {
       fallthrough
     case (.input(let text), .composing):
       self.composingText.append(text)
-      self.setMarkedText(self.composingText.convertTarget)
+      self.updateComposingMarkedText()
       return true
 
     case (.backspace, .normal):
@@ -49,7 +50,7 @@ class KotoInputController: IMKInputController {
       if self.composingText.isEmpty {
         self.clear()
       } else {
-        self.setMarkedText(self.composingText.convertTarget)
+        self.updateComposingMarkedText()
       }
       return true
     case (.backspace, .selecting):
@@ -118,13 +119,44 @@ class KotoInputController: IMKInputController {
     guard let candidate = candidateTexts.first(where: { $0.text == candidateString.string }) else {
       return
     }
-    var afterComposingText = self.composingText
-    afterComposingText.prefixComplete(correspondingCount: candidate.correspondingCount)
-    self.setMarkedText(candidate.text + afterComposingText.convertTarget)
+    self.selectedCandidateText = candidate
+    self.updateSelectingMarkedText()
   }
 
   override func deactivateServer(_ sender: Any!) {
     self.clear()
+  }
+
+  private func updateComposingMarkedText() {
+    let underline =
+        self.mark(
+            forStyle: kTSMHiliteConvertedText,
+            at: .notFound
+        ) as? [NSAttributedString.Key: Any]
+    self.setMarkedText(NSAttributedString(string: self.composingText.convertTarget))
+  }
+
+  private func updateSelectingMarkedText() {
+    guard let candidate = self.selectedCandidateText else {
+      return
+    }
+
+    var afterComposingText = self.composingText
+    afterComposingText.prefixComplete(correspondingCount: candidate.correspondingCount)
+
+    let highlight =
+    self.mark(forStyle: kTSMHiliteSelectedConvertedText, at: .notFound)
+        as? [NSAttributedString.Key: Any]
+    let underline =
+        self.mark(
+            forStyle: kTSMHiliteConvertedText,
+            at: .notFound
+        ) as? [NSAttributedString.Key: Any]
+
+    let text = NSMutableAttributedString(string: "")
+    text.append(NSAttributedString(string: candidate.text, attributes: highlight))
+    text.append(NSAttributedString(string: afterComposingText.convertTarget, attributes: underline))
+    self.setMarkedText(text)
   }
 
   private func insertText(_ text: String) {
@@ -134,18 +166,20 @@ class KotoInputController: IMKInputController {
     client.insertText(text, replacementRange: NSRange(location: NSNotFound, length: NSNotFound))
   }
 
-  private func setMarkedText(_ text: String) {
+  private func setMarkedText(_ text: Any!) {
     guard let client = self.client() else {
       return
     }
-    let range = NSRange(location: NSNotFound, length: NSNotFound)
-    client.setMarkedText(text, selectionRange: range, replacementRange: range)
+    client.setMarkedText(text, selectionRange: .notFound, replacementRange: .notFound)
   }
 
   private func clear() {
     self.setMarkedText("")
     self.candidates.hide()
+
     self.state = .normal
     self.composingText = ComposingText()
+    self.candidateTexts = []
+    self.selectedCandidateText = nil
   }
 }
