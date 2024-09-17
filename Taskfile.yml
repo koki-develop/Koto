@@ -11,6 +11,10 @@ tasks:
           -configuration Debug \
           CONFIGURATION_BUILD_DIR="$(pwd)/build/\$(CONFIGURATION)"
 
+  clean:
+    silent: true
+    cmd: rm -rf ./build
+
   install:
     silent: true
     deps: [build]
