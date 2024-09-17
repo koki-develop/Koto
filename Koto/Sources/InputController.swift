@@ -29,6 +29,9 @@ class KotoInputController: IMKInputController {
     }
 
     switch (eventType, self.state) {
+    case (.input(let text), .selecting):
+      // TODO: implement
+      return true
     case (.input(let text), .normal):
       self.state = .composing
       fallthrough
@@ -39,6 +42,9 @@ class KotoInputController: IMKInputController {
       self.showCandidates()
       return true
 
+    case (.backspace, .normal):
+      // do nothing
+      return false
     case (.backspace, .composing):
       self.composingText.deleteBackwardFromCursorPosition(count: 1)
       self.previewText.removeLast()
@@ -48,18 +54,30 @@ class KotoInputController: IMKInputController {
         self.setMarkedText(self.previewText)
       }
       return true
+    case (.backspace, .selecting):
+      // TODO: implement
+      return true
 
     case (.space, .normal):
       self.insertText("　")
       return true
+    case (.space, .composing):
+      // TODO: implement
+      return true
+    case (.space, .selecting):
+      // TODO: implement
+      return true
 
+    case (.enter, .normal):
+      // do nothing
+      return false
     case (.enter, .composing):
       self.insertText(self.composingText.convertTarget)
       self.clear()
       return true
-
-    default:
-      return false
+    case (.enter, .selecting):
+      // TODO: implement
+      return true
     }
   }
 
