@@ -110,7 +110,7 @@ class KotoInputController: IMKInputController {
     let results = self.converter.requestCandidates(
       self.composingText,
       options: .withDefaultDictionary(
-        requireJapanesePrediction: true,
+        requireJapanesePrediction: false,
         requireEnglishPrediction: false,
         keyboardLanguage: .ja_JP,
         learningType: .nothing,
