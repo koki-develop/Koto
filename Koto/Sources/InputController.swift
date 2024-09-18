@@ -111,12 +111,14 @@ class KotoInputController: IMKInputController {
         self.candidates.update()
       }
       return true
+
     case (.shiftRight, .selecting):
       if !self.composingText.isAtEndIndex {
         _ = self.composingText.moveCursorFromCursorPosition(count: 1)
         self.candidates.update()
       }
       return true
+
     case (.shiftLeft, .composing), (.shiftRight, .composing):
       return true
 
