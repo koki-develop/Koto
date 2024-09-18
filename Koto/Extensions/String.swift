@@ -5,4 +5,8 @@
 //  Created by koki sato on 2024/09/18.
 //
 
-import Foundation
+extension String {
+  func toKatakana() -> String {
+    self.applyingTransform(.hiraganaToKatakana, reverse: false) ?? ""
+  }
+}
