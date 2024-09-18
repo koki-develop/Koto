@@ -14,6 +14,7 @@ class KotoInputController: IMKInputController {
   let candidates: IMKCandidates
 
   var state: InputState = .normal
+  var mode: InputMode?
   var composingText: ComposingText = ComposingText()
   var candidateTexts: [Candidate] = []
   var selectedCandidateText: Candidate?
@@ -24,7 +25,26 @@ class KotoInputController: IMKInputController {
     super.init(server: server, delegate: delegate, client: inputClient)
   }
 
+  override func setValue(_ value: Any!, forTag tag: Int, client sender: Any!) {
+    guard let value = value as? NSString else {
+      return
+    }
+
+    switch value {
+    case "com.apple.inputmethod.Japanese":
+      self.mode = .ja
+    case "com.apple.inputmethod.Roman":
+      self.mode = .en
+    default:
+      break
+    }
+  }
+
   override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
+    if self.mode == .en {
+      return false
+    }
+
     guard let eventType = getEventType(event) else {
       return false
     }
