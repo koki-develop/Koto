@@ -10,11 +10,23 @@
 			<dict>
 				<key>TISIntendedLanguage</key>
 				<string>ja</string>
+				<key>tsInputModePaletteIconFileKey</key>
+				<string>ja.svg</string>
+				<key>tsInputModeAlternateMenuIconFileKey</key>
+				<string>ja.svg</string>
+				<key>tsInputModeMenuIconFileKey</key>
+				<string>ja.svg</string>
 			</dict>
 			<key>com.apple.inputmethod.Roman</key>
 			<dict>
 				<key>TISIntendedLanguage</key>
 				<string>en</string>
+				<key>tsInputModePaletteIconFileKey</key>
+				<string>en.svg</string>
+				<key>tsInputModeAlternateMenuIconFileKey</key>
+				<string>en.svg</string>
+				<key>tsInputModeMenuIconFileKey</key>
+				<string>en.svg</string>
 			</dict>
 		</dict>
 	</dict>
