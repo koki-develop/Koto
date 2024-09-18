@@ -139,11 +139,7 @@ class KotoInputController: IMKInputController {
         learningType: .nothing,
         memoryDirectoryURL: .documentsDirectory,
         sharedContainerURL: .documentsDirectory,
-        zenzaiMode: .on(
-          weight: Bundle.main.bundleURL.appendingPathComponent(
-            "Contents/Resources/zenz-v2-Q5_K_M.gguf", isDirectory: false),
-          inferenceLimit: 3
-        ),
+        zenzaiMode: .off,
         metadata: .init()
       )
     )
