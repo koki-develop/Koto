@@ -83,6 +83,18 @@ class KotoInputController: IMKInputController {
       self.clear()
       return true
 
+    case (.enter, .selecting):
+      self.candidates.interpretKeyEvents([event])
+      return true
+
+    case (.down, .selecting):
+      self.candidates.moveDown(sender)
+      return true
+
+    case (.up, .selecting):
+      self.candidates.moveUp(sender)
+      return true
+
     case (.esc, .composing):
       self.clear()
       return true
