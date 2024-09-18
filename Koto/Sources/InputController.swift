@@ -30,6 +30,18 @@ class KotoInputController: IMKInputController {
       return
     }
 
+    switch self.state {
+    case .selecting:
+      self.insertSelectedCandidate()
+      fallthrough
+    case .composing:
+      self.insertComposingText()
+    default:
+      break
+    }
+
+    self.clear()
+
     switch value {
     case "com.apple.inputmethod.Japanese":
       self.mode = .ja
@@ -202,6 +214,16 @@ class KotoInputController: IMKInputController {
   }
 
   override func deactivateServer(_ sender: Any!) {
+    switch self.state {
+    case .selecting:
+      self.insertSelectedCandidate()
+      fallthrough
+    case .composing:
+      self.insertComposingText()
+    default:
+      break
+    }
+
     self.clear()
   }
 
