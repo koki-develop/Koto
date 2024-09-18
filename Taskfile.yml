@@ -1,37 +1,48 @@
 version: '3'
 
+vars:
+  CONFIGURATION: Debug
+
 tasks:
   build:
-    silent: true
     cmds:
       - |-
         xcodebuild \
           -project ./Koto.xcodeproj \
           -scheme Koto \
-          -configuration Debug \
+          -configuration {{.CONFIGURATION}} \
           CONFIGURATION_BUILD_DIR="$(pwd)/build/\$(CONFIGURATION)"
 
+  build:release:
+    cmds:
+      - task: build
+        vars:
+          CONFIGURATION: Release
+
   clean:
-    silent: true
     cmd: rm -rf ./build
 
   install:
-    silent: true
     deps: [build]
     cmds:
-      - cp -R ./build/Debug/Koto.app ~/Library/Input\ Methods
+      - cp -R ./build/{{.CONFIGURATION}}/Koto.app ~/Library/Input\ Methods
+
+  install:release:
+    deps:
+      - build:release
+    cmds:
+      - task: install
+        vars:
+          CONFIGURATION: Release
 
   uninstall:
-    silent: true
     cmds:
       - rm -rf ~/Library/Input\ Methods/Koto.app
       - task: stop
 
   stop:
-    silent: true
     cmds:
       - pkill Koto
 
   fmt:
-    silent: true
     cmd: swift-format format --recursive --in-place .
