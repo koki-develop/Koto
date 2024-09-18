@@ -31,67 +31,53 @@ func getEventType(_ event: NSEvent) -> EventType? {
     return nil
   }
 
-  switch event.keyCode {
-  case 4:  // h
-    if event.modifierFlags.contains(.control) {
+  // Control key
+  if event.modifierFlags.contains(.control) {
+    switch event.keyCode {
+    case Keycodes.h:
       return .backspace
-    }
-    break
-
-  case 36: // Enter
-    return .enter
-
-  case 49: // Space
-    return .space
-
-  case 51: // Backspace
-    return .backspace
-
-  case 53: // Escape
-    return .esc
-
-  case 40:  // k
-    if event.modifierFlags.contains(.control) {
-      return .ctrlK
-    }
-    break
-
-  case 35:  // p
-    if event.modifierFlags.contains(.control) {
+    case Keycodes.p:
       return .up
-    }
-    break
-
-  case 45:  // n
-    if event.modifierFlags.contains(.control) {
+    case Keycodes.k:
+      return .ctrlK
+    case Keycodes.n:
       return .down
+    default:
+      return .ignore
     }
-    break
-
-  case 123:  // ←
-    if event.modifierFlags.contains(.shift) {
-      return .shiftLeft
-    }
-    return .ignore
-
-  case 124:  // →
-    if event.modifierFlags.contains(.shift) {
-      return .shiftRight
-    }
-    return .ignore
-
-  case 125:  // ↓
-    return .down
-
-  case 126:  // ↑
-    return .up
-
-  default:
-    break
   }
 
-  if event.modifierFlags.contains(.control) {
+  // Shift key
+  if event.modifierFlags.contains(.shift) {
+    switch event.keyCode {
+    case Keycodes.leftArrow:
+      return .shiftLeft
+    case Keycodes.rightArrow:
+      return .shiftRight
+    default:
+      break
+    }
+  }
+
+  switch event.keyCode {
+  case Keycodes.enter:
+    return .enter
+  case Keycodes.space:
+    return .space
+  case Keycodes.backspace:
+    return .backspace
+  case Keycodes.escape:
+    return .esc
+  case Keycodes.leftArrow:
     return .ignore
+  case Keycodes.rightArrow:
+    return .ignore
+  case Keycodes.downArrow:
+    return .down
+  case Keycodes.upArrow:
+    return .up
+  default:
+    break
   }
 
   if let text = event.characters, isPrintable(text) {
@@ -99,6 +85,24 @@ func getEventType(_ event: NSEvent) -> EventType? {
   }
 
   return nil
+}
+
+// ref: https://gist.github.com/swillits/df648e87016772c7f7e5dbed2b345066
+private struct Keycodes {
+  static let enter: UInt16 = 0x4C
+  static let space: UInt16 = 0x31
+  static let backspace: UInt16 = 0x33
+  static let escape: UInt16 = 0x35
+
+  static let leftArrow: UInt16 = 0x7B
+  static let rightArrow: UInt16 = 0x7C
+  static let downArrow: UInt16 = 0x7D
+  static let upArrow: UInt16 = 0x7E
+
+  static let h: UInt16 = 0x04
+  static let k: UInt16 = 0x28
+  static let n: UInt16 = 0x2D
+  static let p: UInt16 = 0x23
 }
 
 private func isPrintable(_ text: String) -> Bool {
