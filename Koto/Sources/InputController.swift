@@ -105,8 +105,19 @@ class KotoInputController: IMKInputController {
       self.candidates.hide()
       return true
 
-    case (.enter, .selecting), (.down, .selecting), (.up, .selecting):
-      self.candidates.interpretKeyEvents([event])
+    case (.shiftLeft, .selecting):
+      if self.composingText.convertTargetCursorPosition > 1 {
+        _ = self.composingText.moveCursorFromCursorPosition(count: -1)
+        self.candidates.update()
+      }
+      return true
+    case (.shiftRight, .selecting):
+      if !self.composingText.isAtEndIndex {
+        _ = self.composingText.moveCursorFromCursorPosition(count: 1)
+        self.candidates.update()
+      }
+      return true
+    case (.shiftLeft, .composing), (.shiftRight, .composing):
       return true
 
     case (.ignore, .composing), (.ignore, .selecting):
@@ -120,7 +131,7 @@ class KotoInputController: IMKInputController {
   @MainActor
   override func candidates(_ sender: Any!) -> [Any]! {
     let results = self.converter.requestCandidates(
-      self.composingText,
+      self.composingText.prefixToCursorPosition(),
       options: .withDefaultDictionary(
         requireJapanesePrediction: false,
         requireEnglishPrediction: false,
