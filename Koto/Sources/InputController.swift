@@ -105,6 +105,17 @@ class KotoInputController: IMKInputController {
       self.candidates.hide()
       return true
 
+    case (.ctrlK, .composing):
+      let text = self.composingText.convertTarget
+      self.composingText = ComposingText()
+      self.composingText.insertAtCursorPosition(
+        text.applyingTransform(.hiraganaToKatakana, reverse: false) ?? "", inputStyle: .direct)
+      self.setComposingMarkedText()
+      return true
+
+    case (.ctrlK, .selecting):
+      return true
+
     case (.shiftLeft, .selecting):
       if self.composingText.convertTargetCursorPosition > 1 {
         _ = self.composingText.moveCursorFromCursorPosition(count: -1)
