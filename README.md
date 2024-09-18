@@ -1,7 +1,9 @@
 <h1 align="center">Koto</h1>
 
 <p align="center">
-  <img src="./Koto/Resources/ja.svg" style="margin-right: 16px;" width="100px">
+  <img src="./Koto/Resources/ja.svg" width="100px">
+  &nbsp;
+  &nbsp;
   <img src="./Koto/Resources/en.svg" width="100px">
 </p>
 
