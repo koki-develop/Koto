@@ -5,4 +5,7 @@
 //  Created by koki sato on 2024/09/19.
 //
 
-import Foundation
+enum InputMode {
+  case ja
+  case en
+}
