@@ -36,7 +36,5 @@
 	<string>$(PRODUCT_MODULE_NAME).KotoInputController</string>
 	<key>TISIntendedLanguage</key>
 	<string>ja</string>
-	<key>tsInputMethodIconFileKey</key>
-	<string>ja.svg</string>
 </dict>
 </plist>
