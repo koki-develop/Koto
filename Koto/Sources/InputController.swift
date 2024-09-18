@@ -54,10 +54,17 @@ class KotoInputController: IMKInputController {
   }
 
   override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
-    if self.mode == .en {
+    switch self.mode {
+    case .ja:
+      return self.handleJa(event, client: sender)
+    case .en:
+      return self.handleEn(event, client: sender)
+    default:
       return false
     }
+  }
 
+  func handleJa(_ event: NSEvent!, client sender: Any!) -> Bool {
     guard let eventType = getEventType(event) else {
       return false
     }
@@ -170,6 +177,10 @@ class KotoInputController: IMKInputController {
     default:
       return false
     }
+  }
+
+  func handleEn(_ event: NSEvent!, client sender: Any!) -> Bool {
+    return false
   }
 
   @MainActor
