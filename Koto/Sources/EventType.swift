@@ -15,6 +15,9 @@ enum EventType {
   case backspace
   case esc
 
+  case shiftLeft
+  case shiftRight
+
   case down
   case up
 
@@ -53,11 +56,19 @@ func getEventType(_ event: NSEvent) -> EventType? {
     }
     break
 
-  case 123, 124:  // ←→
+  case 123: // ←
+    if event.modifierFlags.contains(.shift) {
+      return .shiftLeft
+    }
     return .ignore
-  case 125:
+  case 124:  // →
+    if event.modifierFlags.contains(.shift) {
+      return .shiftRight
+    }
+    return .ignore
+  case 125: // ↓
     return .down
-  case 126:
+  case 126: // ↑
     return .up
 
   default:
