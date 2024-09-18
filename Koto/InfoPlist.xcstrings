@@ -1,0 +1,28 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "com.apple.inputmethod.Japanese" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ひらがな (Koto)"
+          }
+        }
+      }
+    },
+    "com.apple.inputmethod.Roman" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "英数 (Koto)"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

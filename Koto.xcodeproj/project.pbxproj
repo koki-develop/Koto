@@ -12,6 +12,7 @@
 		E703A6CD2C9717C600C72F87 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = E703A6CC2C9717C600C72F87 /* App.swift */; };
 		E703A6CF2C97184E00C72F87 /* InputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E703A6CE2C97184E00C72F87 /* InputController.swift */; };
 		E746EF032C97FA7600E05D92 /* EventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E746EF022C97FA7600E05D92 /* EventType.swift */; };
+		E76160912C9B0E8300BFA5A5 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E76160902C9B0E8300BFA5A5 /* InfoPlist.xcstrings */; };
 		E767473F2C9A441B006BFC98 /* ja.svg in Resources */ = {isa = PBXBuildFile; fileRef = E767473E2C9A441B006BFC98 /* ja.svg */; };
 		E77175832C97FD5F0055553D /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77175822C97FD5E0055553D /* Input.swift */; };
 		E77175892C97FF960055553D /* InputState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77175882C97FF960055553D /* InputState.swift */; };
@@ -33,6 +34,7 @@
 		E703A6CC2C9717C600C72F87 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		E703A6CE2C97184E00C72F87 /* InputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputController.swift; sourceTree = "<group>"; };
 		E746EF022C97FA7600E05D92 /* EventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventType.swift; sourceTree = "<group>"; };
+		E76160902C9B0E8300BFA5A5 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		E767473E2C9A441B006BFC98 /* ja.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ja.svg; sourceTree = "<group>"; };
 		E77175822C97FD5E0055553D /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		E77175882C97FF960055553D /* InputState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputState.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				E703A6C72C97173600C72F87 /* Info.plist */,
+				E76160902C9B0E8300BFA5A5 /* InfoPlist.xcstrings */,
 				E703A6BE2C97157F00C72F87 /* Koto.entitlements */,
 				E703A6B92C97157F00C72F87 /* Assets.xcassets */,
 				E703A6C82C97175900C72F87 /* Sources */,
@@ -193,6 +196,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E767473F2C9A441B006BFC98 /* ja.svg in Resources */,
+				E76160912C9B0E8300BFA5A5 /* InfoPlist.xcstrings in Resources */,
 				E703A6BD2C97157F00C72F87 /* Preview Assets.xcassets in Resources */,
 				E703A6BA2C97157F00C72F87 /* Assets.xcassets in Resources */,
 				E7B22FA02C9B0B5F0002F84B /* en.svg in Resources */,
