@@ -56,7 +56,7 @@ func getEventType(_ event: NSEvent) -> EventType? {
     }
     break
 
-  case 123: // ←
+  case 123:  // ←
     if event.modifierFlags.contains(.shift) {
       return .shiftLeft
     }
@@ -66,9 +66,9 @@ func getEventType(_ event: NSEvent) -> EventType? {
       return .shiftRight
     }
     return .ignore
-  case 125: // ↓
+  case 125:  // ↓
     return .down
-  case 126: // ↑
+  case 126:  // ↑
     return .up
 
   default:
