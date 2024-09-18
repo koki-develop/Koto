@@ -26,7 +26,7 @@ enum EventType {
   case input(_ text: String)
 }
 
-func getEventType(_ event: NSEvent) -> EventType? {
+func getEventType(_ event: NSEvent, mode: InputMode) -> EventType? {
   if event.modifierFlags.contains(.command) {
     return nil
   }
@@ -60,6 +60,11 @@ func getEventType(_ event: NSEvent) -> EventType? {
   }
 
   switch event.keyCode {
+  case Keycodes.yen:
+    if mode == .en {
+      return .input("\\")
+    }
+    break
   case Keycodes.enter:
     return .enter
   case Keycodes.space:
@@ -89,6 +94,7 @@ func getEventType(_ event: NSEvent) -> EventType? {
 
 // ref: https://gist.github.com/swillits/df648e87016772c7f7e5dbed2b345066
 private struct Keycodes {
+  static let yen: UInt16 = 0x2A
   static let enter: UInt16 = 0x4C
   static let space: UInt16 = 0x31
   static let backspace: UInt16 = 0x33

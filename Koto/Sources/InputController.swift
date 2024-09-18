@@ -15,7 +15,7 @@ class KotoInputController: IMKInputController {
   let candidates: IMKCandidates
 
   var state: InputState = .normal
-  var mode: InputMode?
+  var mode: InputMode = .ja
   var composingText: ComposingText = ComposingText()
   var candidateTexts: [Candidate] = []
   var selectedCandidateText: Candidate?
@@ -59,13 +59,11 @@ class KotoInputController: IMKInputController {
       return self.handleJa(event, client: sender)
     case .en:
       return self.handleEn(event, client: sender)
-    default:
-      return false
     }
   }
 
   func handleJa(_ event: NSEvent!, client sender: Any!) -> Bool {
-    guard let eventType = getEventType(event) else {
+    guard let eventType = getEventType(event, mode: self.mode) else {
       return false
     }
 
@@ -180,7 +178,18 @@ class KotoInputController: IMKInputController {
   }
 
   func handleEn(_ event: NSEvent!, client sender: Any!) -> Bool {
-    return false
+    guard let eventType = getEventType(event, mode: self.mode) else {
+      return false
+    }
+
+    switch eventType {
+    case .input(let text):
+      self.insertText(text)
+      return true
+
+    default:
+      return false
+    }
   }
 
   @MainActor
