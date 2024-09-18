@@ -32,6 +32,7 @@ runs:
           version "${KOTO_VERSION}"
           url "https://github.com/${KOTO_REPO}/releases/download/v#{version}/Koto.pkg"
           sha256 "${KOTO_SHA256}"
+          depends_on macos: ">= :sonoma"
 
           name "Koto"
           desc "${KOTO_DESC}"
