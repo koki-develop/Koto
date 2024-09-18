@@ -1,6 +1,10 @@
 <h1 align="center">Koto</h1>
 
 <p align="center">
+  <img src="./Koto/Resources/ja.svg" width="100px">
+</p>
+
+<p align="center">
   <i>IME for Mac.</i>
 </p>
 
