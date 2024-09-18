@@ -24,7 +24,6 @@ class KotoInputController: IMKInputController {
     super.init(server: server, delegate: delegate, client: inputClient)
   }
 
-  @MainActor
   override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
     guard let eventType = getEventType(event) else {
       return false
