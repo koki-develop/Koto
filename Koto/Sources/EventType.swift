@@ -32,20 +32,23 @@ func getEventType(_ event: NSEvent) -> EventType? {
   }
 
   switch event.keyCode {
-  case 36:
-    return .enter
-  case 49:
-    return .space
-  case 51:
-    return .backspace
-  case 53:
-    return .esc
-
   case 4:  // h
     if event.modifierFlags.contains(.control) {
       return .backspace
     }
     break
+
+  case 36: // Enter
+    return .enter
+
+  case 49: // Space
+    return .space
+
+  case 51: // Backspace
+    return .backspace
+
+  case 53: // Escape
+    return .esc
 
   case 40:  // k
     if event.modifierFlags.contains(.control) {
