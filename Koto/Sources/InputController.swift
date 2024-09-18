@@ -168,7 +168,7 @@ class KotoInputController: IMKInputController {
         forStyle: kTSMHiliteConvertedText,
         at: .notFound
       ) as? [NSAttributedString.Key: Any]
-    self.setMarkedText(NSAttributedString(string: self.composingText.convertTarget))
+    self.setMarkedText(NSAttributedString(string: self.composingText.convertTarget, attributes: underline))
   }
 
   private func setSelectingMarkedText() {
