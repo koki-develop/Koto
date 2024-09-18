@@ -8,6 +8,7 @@
 import InputMethodKit
 import KanaKanjiConverterModuleWithDefaultDictionary
 
+// TODO: refactor
 @objc(KotoInputController)
 class KotoInputController: IMKInputController {
   @MainActor let converter = KanaKanjiConverter()
