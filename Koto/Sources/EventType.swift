@@ -94,8 +94,8 @@ func getEventType(_ event: NSEvent, mode: InputMode) -> EventType? {
 
 // ref: https://gist.github.com/swillits/df648e87016772c7f7e5dbed2b345066
 private struct Keycodes {
-  static let yen: UInt16 = 0x2A
-  static let enter: UInt16 = 0x4C
+  static let yen: UInt16 = 0x5d
+  static let enter: UInt16 = 0x24
   static let space: UInt16 = 0x31
   static let backspace: UInt16 = 0x33
   static let escape: UInt16 = 0x35
