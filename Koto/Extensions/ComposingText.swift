@@ -35,6 +35,13 @@ extension ComposingText {
     self.insertAtCursorPosition(text, inputStyle: .roman2kana)
   }
 
+  func toKatakana() -> ComposingText {
+    let katakana = self.convertTarget.toKatakana()
+    var after = ComposingText()
+    after.insertAtCursorPosition(katakana, inputStyle: .direct)
+    return after
+  }
+
   private func shouldInsertN(_ next: String) -> Bool {
     guard let last = self.input.last else {
       return false

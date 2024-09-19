@@ -143,9 +143,7 @@ class KotoInputController: IMKInputController {
       return true
 
     case (.ctrlK, .composing):
-      let text = self.composingText.convertTarget
-      self.composingText = ComposingText()
-      self.composingText.insertAtCursorPosition(text.toKatakana(), inputStyle: .direct)
+      self.composingText = self.composingText.toKatakana()
       self.setComposingMarkedText()
       return true
 
