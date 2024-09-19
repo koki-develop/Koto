@@ -60,6 +60,8 @@ func getEventType(_ event: NSEvent, mode: InputMode) -> EventType? {
   }
 
   switch event.keyCode {
+  case Keycodes.yen:
+    return getYenKeyEventType(event, mode: mode)
   case Keycodes.enter:
     return .enter
   case Keycodes.space:
@@ -87,8 +89,26 @@ func getEventType(_ event: NSEvent, mode: InputMode) -> EventType? {
   return nil
 }
 
+private func getYenKeyEventType(_ event: NSEvent, mode: InputMode) -> EventType? {
+  switch mode {
+  case .ja:
+    if event.modifierFlags.contains(.option) {
+      return .input("\\")
+    } else {
+      return .input("¥")
+    }
+  case .en:
+    if event.modifierFlags.contains(.option) {
+      return .input("¥")
+    } else {
+      return .input("\\")
+    }
+  }
+}
+
 // ref: https://gist.github.com/swillits/df648e87016772c7f7e5dbed2b345066
 private struct Keycodes {
+  static let yen: UInt16 = 0x5d
   static let enter: UInt16 = 0x24
   static let space: UInt16 = 0x31
   static let backspace: UInt16 = 0x33
