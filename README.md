@@ -15,7 +15,7 @@
   <img src="./assets/demo.gif" width="600px">
 </p>
 
-# インストール
+## インストール
 
 以下のコマンドを実行すると Koto をインストールできます。
 
@@ -26,15 +26,15 @@ $ brew install --cask koki-develop/tap/koto
 インストールが完了したら Mac を再起動もしくはログアウトしてログインし直してください。  
 その後、 `システム設定` > `キーボード` > `入力ソース` から Koto を選択して追加してください。
 
-# アップデート
+## アップデート
 
-Koto をアップデートするには以下のコマンドを実行してください。
+アップデートも Homebrew 経由で行うことができます。
 
 ```console
 $ brew update
 $ brew upgrade koki-develop/tap/koto
 ```
 
-# ライセンス
+## ライセンス
 
 [MIT](./LICENSE)
