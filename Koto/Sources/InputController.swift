@@ -30,10 +30,6 @@ class KotoInputController: IMKInputController {
       return
     }
 
-    self.insertSelectedCandidate()
-    self.insertComposingText()
-    self.clear()
-
     switch value {
     case "com.apple.inputmethod.Japanese":
       self.mode = .ja
@@ -45,15 +41,6 @@ class KotoInputController: IMKInputController {
   }
 
   override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
-    switch self.mode {
-    case .ja:
-      return self.handleJa(event, client: sender)
-    case .en:
-      return self.handleEn(event, client: sender)
-    }
-  }
-
-  func handleJa(_ event: NSEvent!, client sender: Any!) -> Bool {
     guard let eventType = getEventType(event, mode: self.mode) else {
       return false
     }
@@ -66,6 +53,10 @@ class KotoInputController: IMKInputController {
       fallthrough
 
     case (.input(let text), .normal):
+      if self.mode == .en {
+        self.insertText(text)
+        return true
+      }
       self.state = .composing
       fallthrough
 
@@ -90,7 +81,12 @@ class KotoInputController: IMKInputController {
       return false
 
     case (.space, .normal):
-      self.insertText("　")
+      switch self.mode {
+      case .ja:
+        self.insertText("　")
+      case .en:
+        self.insertText(" ")
+      }
       return true
 
     case (.space, .composing), (.down, .composing):
@@ -159,21 +155,6 @@ class KotoInputController: IMKInputController {
       return true
 
     case (.ignore, .composing), (.ignore, .selecting):
-      return true
-
-    default:
-      return false
-    }
-  }
-
-  func handleEn(_ event: NSEvent!, client sender: Any!) -> Bool {
-    guard let eventType = getEventType(event, mode: self.mode) else {
-      return false
-    }
-
-    switch eventType {
-    case .input(let text):
-      self.insertText(text)
       return true
 
     default:
