@@ -31,16 +31,8 @@ class KotoInputController: IMKInputController {
       return
     }
 
-    switch self.state {
-    case .selecting:
-      self.insertSelectedCandidate()
-      fallthrough
-    case .composing:
-      self.insertComposingText()
-    default:
-      break
-    }
-
+    self.insertSelectedCandidate()
+    self.insertComposingText()
     self.clear()
 
     switch value {
@@ -233,16 +225,8 @@ class KotoInputController: IMKInputController {
   }
 
   override func deactivateServer(_ sender: Any!) {
-    switch self.state {
-    case .selecting:
-      self.insertSelectedCandidate()
-      fallthrough
-    case .composing:
-      self.insertComposingText()
-    default:
-      break
-    }
-
+    self.insertSelectedCandidate()
+    self.insertComposingText()
     self.clear()
   }
 
