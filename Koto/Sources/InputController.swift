@@ -232,14 +232,20 @@ class KotoInputController: IMKInputController {
     client.setMarkedText(text, selectionRange: .notFound, replacementRange: .notFound)
   }
 
+  private func underlineAttributes() -> [NSAttributedString.Key: Any]? {
+    return self.mark(forStyle: kTSMHiliteConvertedText, at: .notFound)
+      as? [NSAttributedString.Key: Any]
+  }
+
+  private func highlightAttributes() -> [NSAttributedString.Key: Any]? {
+    return self.mark(forStyle: kTSMHiliteSelectedConvertedText, at: .notFound)
+      as? [NSAttributedString.Key: Any]
+  }
+
   private func setComposingMarkedText() {
-    let underline =
-      self.mark(
-        forStyle: kTSMHiliteConvertedText,
-        at: .notFound
-      ) as? [NSAttributedString.Key: Any]
     self.setMarkedText(
-      NSAttributedString(string: self.composingText.convertTarget, attributes: underline))
+      NSAttributedString(
+        string: self.composingText.convertTarget, attributes: self.underlineAttributes()))
   }
 
   private func setSelectingMarkedText() {
@@ -250,18 +256,11 @@ class KotoInputController: IMKInputController {
     var afterComposingText = self.composingText
     afterComposingText.prefixComplete(correspondingCount: candidate.correspondingCount)
 
-    let highlight =
-      self.mark(forStyle: kTSMHiliteSelectedConvertedText, at: .notFound)
-      as? [NSAttributedString.Key: Any]
-    let underline =
-      self.mark(
-        forStyle: kTSMHiliteConvertedText,
-        at: .notFound
-      ) as? [NSAttributedString.Key: Any]
-
     let text = NSMutableAttributedString(string: "")
-    text.append(NSAttributedString(string: candidate.text, attributes: highlight))
-    text.append(NSAttributedString(string: afterComposingText.convertTarget, attributes: underline))
+    text.append(NSAttributedString(string: candidate.text, attributes: self.highlightAttributes()))
+    text.append(
+      NSAttributedString(
+        string: afterComposingText.convertTarget, attributes: self.underlineAttributes()))
     self.setMarkedText(text)
   }
 
