@@ -61,7 +61,12 @@ class KotoInputController: IMKInputController {
       fallthrough
 
     case (.input(let text), .composing):
-      self.composingText.append(text)
+      switch self.mode {
+      case .ja:
+        self.composingText.append(text, inputStyle: .roman2kana)
+      case .en:
+        self.composingText.append(text, inputStyle: .direct)
+      }
       self.setComposingMarkedText()
       return true
 
@@ -90,8 +95,8 @@ class KotoInputController: IMKInputController {
       return true
 
     case (.space, .composing), (.down, .composing):
-      if self.composingText.hasSuffix("n") {
-        self.composingText.append("n")
+      if self.composingText.shouldInsertN() {
+        self.composingText.append("n", inputStyle: .roman2kana)
       }
       self.candidates.update()
       self.candidates.show()

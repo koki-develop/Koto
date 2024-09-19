@@ -22,17 +22,21 @@ private let hankakuToZenkakuMap: [String: String] = [
 ]
 
 extension ComposingText {
-  mutating func append(_ text: String) {
-    if let zenkaku = hankakuToZenkakuMap[text] {
-      self.insertAtCursorPosition(zenkaku, inputStyle: .direct)
-      return
-    }
+  mutating func append(_ text: String, inputStyle: InputStyle) {
+    switch inputStyle {
+    case .direct:
+      self.insertAtCursorPosition(text, inputStyle: .direct)
 
-    if self.shouldInsertN(text) {
-      self.insertAtCursorPosition("n", inputStyle: .roman2kana)
+    case .roman2kana:
+      if let zenkaku = hankakuToZenkakuMap[text] {
+        self.insertAtCursorPosition(zenkaku, inputStyle: .direct)
+        return
+      }
+      if self.shouldInsertN(next: text) {
+        self.insertAtCursorPosition("n", inputStyle: .roman2kana)
+      }
+      self.insertAtCursorPosition(text, inputStyle: .roman2kana)
     }
-
-    self.insertAtCursorPosition(text, inputStyle: .roman2kana)
   }
 
   func hasSuffix(_ suffix: String) -> Bool {
@@ -50,7 +54,7 @@ extension ComposingText {
     return after
   }
 
-  private func shouldInsertN(_ next: String) -> Bool {
+  func shouldInsertN(next: String? = nil) -> Bool {
     guard let last = self.input.last else {
       return false
     }
@@ -63,7 +67,7 @@ extension ComposingText {
       return false
     }
 
-    if ["n", "a", "i", "u", "e", "o", "y"].contains(next) {
+    if let next = next, ["n", "a", "i", "u", "e", "o", "y"].contains(next) {
       return false
     }
 
