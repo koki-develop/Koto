@@ -11,6 +11,10 @@
   <i>IME for Mac.</i>
 </p>
 
+<p align="center">
+  <img src="./assets/demo.gif" width="600px">
+</p>
+
 # インストール
 
 以下のコマンドを実行すると Koto をインストールできます。
