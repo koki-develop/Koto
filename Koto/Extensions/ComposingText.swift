@@ -39,6 +39,10 @@ extension ComposingText {
     return self.convertTarget.hasSuffix(suffix)
   }
 
+  mutating func removeLast() {
+    self.deleteBackwardFromCursorPosition(count: 1)
+  }
+
   func toKatakana() -> ComposingText {
     let katakana = self.convertTarget.toKatakana()
     var after = ComposingText()

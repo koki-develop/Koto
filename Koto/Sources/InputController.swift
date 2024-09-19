@@ -76,7 +76,7 @@ class KotoInputController: IMKInputController {
       return true
 
     case (.backspace, .composing):
-      self.composingText.deleteBackwardFromCursorPosition(count: 1)
+      self.composingText.removeLast()
       if self.composingText.isEmpty {
         self.clear()
       } else {
