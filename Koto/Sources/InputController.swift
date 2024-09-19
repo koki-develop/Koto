@@ -202,12 +202,7 @@ class KotoInputController: IMKInputController {
   }
 
   override func candidateSelected(_ candidateString: NSAttributedString!) {
-    guard let candidate = candidateTexts.first(where: { $0.text == candidateString.string }) else {
-      return
-    }
-
-    self.insertText(candidate.text)
-    self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
+    self.insertSelectedCandidate()
 
     if self.composingText.isEmpty {
       self.clear()
