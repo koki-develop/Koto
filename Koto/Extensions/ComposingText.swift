@@ -25,8 +25,33 @@ extension ComposingText {
   mutating func append(_ text: String) {
     if let zenkaku = hankakuToZenkakuMap[text] {
       self.insertAtCursorPosition(zenkaku, inputStyle: .direct)
-    } else {
-      self.insertAtCursorPosition(text, inputStyle: .roman2kana)
+      return
     }
+
+    if self.shouldInsertN(text) {
+      self.insertAtCursorPosition("n", inputStyle: .roman2kana)
+    }
+
+    self.insertAtCursorPosition(text, inputStyle: .roman2kana)
+  }
+
+  private func shouldInsertN(_ next: String) -> Bool {
+    guard let last = self.input.last else {
+      return false
+    }
+
+    if last.character != "n" {
+      return false
+    }
+
+    if last.inputStyle == .roman2kana {
+      return false
+    }
+
+    if ["n", "a", "i", "u", "e", "o", "y"].contains(next) {
+      return false
+    }
+
+    return true
   }
 }
