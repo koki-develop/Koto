@@ -17,7 +17,7 @@
 
 ## インストール
 
-以下のコマンドを実行すると Koto をインストールできます。
+以下のコマンドで Koto をインストールできます。
 
 ```console
 $ brew install --cask koki-develop/tap/koto
