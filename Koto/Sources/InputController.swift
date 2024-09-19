@@ -95,7 +95,7 @@ class KotoInputController: IMKInputController {
       return true
 
     case (.space, .composing), (.down, .composing):
-      if self.composingText.convertTarget.hasSuffix("n") {
+      if self.composingText.hasSuffix("n") {
         self.composingText.append("n")
       }
       self.candidates.update()

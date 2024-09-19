@@ -35,6 +35,10 @@ extension ComposingText {
     self.insertAtCursorPosition(text, inputStyle: .roman2kana)
   }
 
+  func hasSuffix(_ suffix: String) -> Bool {
+    return self.convertTarget.hasSuffix(suffix)
+  }
+
   func toKatakana() -> ComposingText {
     let katakana = self.convertTarget.toKatakana()
     var after = ComposingText()
