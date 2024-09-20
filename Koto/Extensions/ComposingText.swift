@@ -63,7 +63,7 @@ extension ComposingText {
       return false
     }
 
-    if last.inputStyle == .roman2kana {
+    if last.inputStyle != .roman2kana {
       return false
     }
 
