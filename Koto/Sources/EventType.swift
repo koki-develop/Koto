@@ -90,6 +90,10 @@ func getEventType(_ event: NSEvent, mode: InputMode) -> EventType? {
 }
 
 private func getYenKeyEventType(_ event: NSEvent, mode: InputMode) -> EventType? {
+  if event.modifierFlags.contains(.shift) {
+    return .input("|")
+  }
+
   switch mode {
   case .ja:
     if event.modifierFlags.contains(.option) {
