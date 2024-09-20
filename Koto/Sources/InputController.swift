@@ -40,6 +40,7 @@ class KotoInputController: IMKInputController {
     }
   }
 
+  @MainActor
   override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
     guard let eventType = getEventType(event, mode: self.mode) else {
       return false
@@ -186,6 +187,7 @@ class KotoInputController: IMKInputController {
     return self.candidateTexts.map { $0.text }
   }
 
+  @MainActor
   override func candidateSelected(_ candidateString: NSAttributedString!) {
     self.insertSelectedCandidate()
 
@@ -204,6 +206,7 @@ class KotoInputController: IMKInputController {
     self.setSelectingMarkedText()
   }
 
+  @MainActor
   override func deactivateServer(_ sender: Any!) {
     self.insertSelectedCandidate()
     self.insertComposingText()
@@ -271,11 +274,13 @@ class KotoInputController: IMKInputController {
     self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
   }
 
+  @MainActor
   private func clear() {
     self.setMarkedText("")
     self.candidates.hide()
 
     self.state = .normal
+    self.converter.stopComposition()
     self.composingText.stopComposition()
     self.candidateTexts = []
     self.selectedCandidateText = nil
