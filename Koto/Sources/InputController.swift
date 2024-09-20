@@ -16,7 +16,7 @@ class KotoInputController: IMKInputController {
   var state: InputState = .normal
   var mode: InputMode = .ja
   var composingText: ComposingText = ComposingText()
-  var candidateTexts: [Candidate] = []
+  var currentCandidates: [Candidate] = []
   var selectingCandidate: Candidate?
 
   override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
@@ -183,8 +183,8 @@ class KotoInputController: IMKInputController {
         metadata: .init()
       )
     )
-    self.candidateTexts = results.mainResults
-    return self.candidateTexts.map { $0.text }
+    self.currentCandidates = results.mainResults
+    return self.currentCandidates.map { $0.text }
   }
 
   @MainActor
@@ -199,7 +199,7 @@ class KotoInputController: IMKInputController {
   }
 
   override func candidateSelectionChanged(_ candidateString: NSAttributedString!) {
-    guard let candidate = candidateTexts.first(where: { $0.text == candidateString.string }) else {
+    guard let candidate = currentCandidates.first(where: { $0.text == candidateString.string }) else {
       return
     }
     self.selectingCandidate = candidate
@@ -282,7 +282,7 @@ class KotoInputController: IMKInputController {
     self.state = .normal
     self.converter.stopComposition()
     self.composingText.stopComposition()
-    self.candidateTexts = []
+    self.currentCandidates = []
     self.selectingCandidate = nil
   }
 }
