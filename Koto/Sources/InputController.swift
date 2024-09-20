@@ -48,7 +48,7 @@ class KotoInputController: IMKInputController {
 
     switch (eventType, self.state) {
     case (.input(let text), .selecting):
-      self.insertSelectedCandidate()
+      self.insertSelectingCandidate()
       self.insertComposingText()
       self.clear()
       fallthrough
@@ -81,7 +81,7 @@ class KotoInputController: IMKInputController {
       return true
 
     case (.backspace, .selecting):
-      self.insertSelectedCandidate()
+      self.insertSelectingCandidate()
       self.insertComposingText()
       self.clear()
       return false
@@ -189,7 +189,7 @@ class KotoInputController: IMKInputController {
 
   @MainActor
   override func candidateSelected(_ candidateString: NSAttributedString!) {
-    self.insertSelectedCandidate()
+    self.insertSelectingCandidate()
 
     if self.composingText.isEmpty {
       self.clear()
@@ -208,7 +208,7 @@ class KotoInputController: IMKInputController {
 
   @MainActor
   override func deactivateServer(_ sender: Any!) {
-    self.insertSelectedCandidate()
+    self.insertSelectingCandidate()
     self.insertComposingText()
     self.clear()
   }
@@ -266,7 +266,7 @@ class KotoInputController: IMKInputController {
     self.insertText(self.composingText.convertTarget)
   }
 
-  private func insertSelectedCandidate() {
+  private func insertSelectingCandidate() {
     guard let candidate = self.selectingCandidate else {
       return
     }
