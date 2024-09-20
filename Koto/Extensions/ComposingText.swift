@@ -49,10 +49,9 @@ extension ComposingText {
   }
 
   func toKatakana() -> ComposingText {
-    let katakana = self.convertTarget.toKatakana()
-    var after = ComposingText()
-    after.insertAtCursorPosition(katakana, inputStyle: .direct)
-    return after
+    var katakana = ComposingText()
+    katakana.insertAtCursorPosition(self.convertTarget.toKatakana(), inputStyle: .direct)
+    return katakana
   }
 
   func shouldInsertN(next: String? = nil) -> Bool {
