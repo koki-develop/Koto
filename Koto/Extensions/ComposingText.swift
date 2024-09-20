@@ -56,11 +56,11 @@ extension ComposingText {
   }
 
   func shouldInsertN(next: String? = nil) -> Bool {
-    guard let last = self.input.last else {
+    if !self.convertTarget.hasSuffix("n") {
       return false
     }
 
-    if last.character != "n" {
+    guard let last = self.input.last else {
       return false
     }
 
