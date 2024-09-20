@@ -23,14 +23,15 @@ private let hankakuToZenkakuMap: [String: String] = [
 
 extension ComposingText {
   mutating func append(_ text: String, inputStyle: InputStyle) {
+    var text = text
+
     switch inputStyle {
     case .direct:
       self.insertAtCursorPosition(text, inputStyle: .direct)
 
     case .roman2kana:
       if let zenkaku = hankakuToZenkakuMap[text] {
-        self.insertAtCursorPosition(zenkaku, inputStyle: .direct)
-        return
+        text = zenkaku
       }
       if self.shouldInsertN(next: text) {
         self.insertAtCursorPosition("n", inputStyle: .roman2kana)
