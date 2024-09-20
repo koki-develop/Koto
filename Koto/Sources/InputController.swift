@@ -276,7 +276,7 @@ class KotoInputController: IMKInputController {
     self.candidates.hide()
 
     self.state = .normal
-    self.composingText = ComposingText()
+    self.composingText.stopComposition()
     self.candidateTexts = []
     self.selectedCandidateText = nil
   }
