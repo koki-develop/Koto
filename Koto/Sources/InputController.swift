@@ -109,12 +109,12 @@ class KotoInputController: IMKInputController {
       return true
 
     case (.space, .composing), (.down, .composing):
+      self.state = .selecting
       if self.composingText.shouldInsertN() {
         self.composingText.append("n", inputStyle: .roman2kana)
       }
       self.candidates.update()
       self.candidates.show()
-      self.state = .selecting
       return true
 
     case (.space, .selecting):
@@ -143,8 +143,8 @@ class KotoInputController: IMKInputController {
       return true
 
     case (.esc, .selecting):
-      self.setComposingMarkedText()
       self.state = .composing
+      self.setComposingMarkedText()
       self.candidates.hide()
       return true
 
@@ -154,6 +154,10 @@ class KotoInputController: IMKInputController {
       return true
 
     case (.ctrlK, .selecting):
+      self.state = .composing
+      self.candidates.hide()
+      self.composingText = self.composingText.toKatakana()
+      self.setComposingMarkedText()
       return true
 
     case (.shiftLeft, .selecting):
