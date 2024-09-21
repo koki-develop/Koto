@@ -275,12 +275,15 @@ class KotoInputController: IMKInputController {
     self.insertText(self.composingText.convertTarget)
   }
 
+  @MainActor
   private func insertSelectingCandidate() {
     guard let candidate = self.selectingCandidate else {
       return
     }
     self.insertText(candidate.text)
+
     self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
+    self.converter.updateLearningData(candidate)
   }
 
   @MainActor
