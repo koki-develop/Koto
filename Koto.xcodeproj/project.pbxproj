@@ -18,6 +18,7 @@
 		E771758B2C986B150055553D /* ComposingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E771758A2C986B150055553D /* ComposingText.swift */; };
 		E77682262C99A9D300E23949 /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77682252C99A9D300E23949 /* NSRange.swift */; };
 		E779B5EC2C9B8E2F00DDB3D5 /* InputMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E779B5EB2C9B8E2F00DDB3D5 /* InputMode.swift */; };
+		E7A541872C9F06E300655653 /* KanaKanjiConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A541862C9F06E300655653 /* KanaKanjiConverter.swift */; };
 		E7B22F9E2C9AF8310002F84B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B22F9D2C9AF8310002F84B /* String.swift */; };
 		E7B22FA02C9B0B5F0002F84B /* en.svg in Resources */ = {isa = PBXBuildFile; fileRef = E7B22F9F2C9B0B5F0002F84B /* en.svg */; };
 		E7E6D3C32C971E9700DC00CC /* KanaKanjiConverterModule in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C22C971E9700DC00CC /* KanaKanjiConverterModule */; };
@@ -40,6 +41,7 @@
 		E771758A2C986B150055553D /* ComposingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposingText.swift; sourceTree = "<group>"; };
 		E77682252C99A9D300E23949 /* NSRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRange.swift; sourceTree = "<group>"; };
 		E779B5EB2C9B8E2F00DDB3D5 /* InputMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMode.swift; sourceTree = "<group>"; };
+		E7A541862C9F06E300655653 /* KanaKanjiConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaKanjiConverter.swift; sourceTree = "<group>"; };
 		E7B22F9D2C9AF8310002F84B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		E7B22F9F2C9B0B5F0002F84B /* en.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = en.svg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -124,6 +126,7 @@
 				E771758A2C986B150055553D /* ComposingText.swift */,
 				E77682252C99A9D300E23949 /* NSRange.swift */,
 				E7B22F9D2C9AF8310002F84B /* String.swift */,
+				E7A541862C9F06E300655653 /* KanaKanjiConverter.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -217,6 +220,7 @@
 				E77682262C99A9D300E23949 /* NSRange.swift in Sources */,
 				E771758B2C986B150055553D /* ComposingText.swift in Sources */,
 				E7B22F9E2C9AF8310002F84B /* String.swift in Sources */,
+				E7A541872C9F06E300655653 /* KanaKanjiConverter.swift in Sources */,
 				E703A6CD2C9717C600C72F87 /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
