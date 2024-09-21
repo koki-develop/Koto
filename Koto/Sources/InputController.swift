@@ -220,6 +220,8 @@ class KotoInputController: IMKInputController {
     self.insertSelectingCandidate()
     self.insertComposingText()
     self.clear()
+
+    self.converter.saveLearningData()
   }
 
   private func setMarkedText(_ text: Any!) {
