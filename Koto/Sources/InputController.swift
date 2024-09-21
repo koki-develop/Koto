@@ -10,8 +10,21 @@ import KanaKanjiConverterModuleWithDefaultDictionary
 
 @objc(KotoInputController)
 class KotoInputController: IMKInputController {
-  @MainActor let converter = KanaKanjiConverter()
   let candidates: IMKCandidates
+
+  @MainActor let converter = KanaKanjiConverter()
+  var convertOptions: ConvertRequestOptions {
+    .withDefaultDictionary(
+      requireJapanesePrediction: false,
+      requireEnglishPrediction: false,
+      keyboardLanguage: .ja_JP,
+      learningType: .nothing,
+      memoryDirectoryURL: .documentsDirectory,
+      sharedContainerURL: .documentsDirectory,
+      zenzaiMode: .off,
+      metadata: .init()
+    )
+  }
 
   var state: InputState = .normal
   var mode: InputMode = .ja
@@ -172,16 +185,7 @@ class KotoInputController: IMKInputController {
   override func candidates(_ sender: Any!) -> [Any]! {
     let results = self.converter.requestCandidates(
       self.composingText.prefixToCursorPosition(),
-      options: .withDefaultDictionary(
-        requireJapanesePrediction: false,
-        requireEnglishPrediction: false,
-        keyboardLanguage: .ja_JP,
-        learningType: .nothing,
-        memoryDirectoryURL: .documentsDirectory,
-        sharedContainerURL: .documentsDirectory,
-        zenzaiMode: .off,
-        metadata: .init()
-      )
+      options: self.convertOptions
     )
     self.currentCandidates = results.mainResults
     return self.currentCandidates.map { $0.text }
@@ -199,7 +203,8 @@ class KotoInputController: IMKInputController {
   }
 
   override func candidateSelectionChanged(_ candidateString: NSAttributedString!) {
-    guard let candidate = currentCandidates.first(where: { $0.text == candidateString.string }) else {
+    guard let candidate = currentCandidates.first(where: { $0.text == candidateString.string })
+    else {
       return
     }
     self.selectingCandidate = candidate
