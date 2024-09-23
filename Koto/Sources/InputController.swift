@@ -50,6 +50,8 @@ class KotoInputController: IMKInputController {
     default:
       break
     }
+
+    super.setValue(value, forTag: tag, client: sender)
   }
 
   @MainActor
@@ -218,6 +220,7 @@ class KotoInputController: IMKInputController {
     self.clear()
 
     self.converter.saveLearningData()
+    super.deactivateServer(sender)
   }
 
   private func setMarkedText(_ text: Any!) {
