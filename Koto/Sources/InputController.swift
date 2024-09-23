@@ -56,7 +56,7 @@ class KotoInputController: IMKInputController {
 
   @MainActor
   override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
-    guard let eventType = getEventType(event, mode: self.mode) else {
+    guard let eventType = self.getEventType(event) else {
       return false
     }
 
@@ -303,5 +303,85 @@ class KotoInputController: IMKInputController {
   @objc @MainActor
   func resetLearningData(_ sender: Any) {
     self.converter.resetLearningData()
+  }
+
+  private func getEventType(_ event: NSEvent) -> EventType? {
+    if event.modifierFlags.contains(.command) {
+      return nil
+    }
+
+    // Control key
+    if event.modifierFlags.contains(.control) {
+      switch event.keyCode {
+      case Keycodes.h:
+        return .backspace
+      case Keycodes.p:
+        return .up
+      case Keycodes.k:
+        return .ctrlK
+      case Keycodes.n:
+        return .down
+      default:
+        return .ignore
+      }
+    }
+
+    switch event.keyCode {
+    case Keycodes.yen:
+      return getYenKeyEventType(event)
+    case Keycodes.enter:
+      return .enter
+    case Keycodes.space:
+      return .space
+    case Keycodes.backspace:
+      return .backspace
+    case Keycodes.escape:
+      return .esc
+    case Keycodes.leftArrow:
+      if event.modifierFlags.contains(.shift) {
+        return .shiftLeft
+      } else {
+        return .ignore
+      }
+    case Keycodes.rightArrow:
+      if event.modifierFlags.contains(.shift) {
+        return .shiftRight
+      } else {
+        return .ignore
+      }
+    case Keycodes.downArrow:
+      return .down
+    case Keycodes.upArrow:
+      return .up
+    default:
+      break
+    }
+
+    if let text = event.characters, isPrintable(text) {
+      return .input(text)
+    }
+
+    return nil
+  }
+
+  private func getYenKeyEventType(_ event: NSEvent) -> EventType {
+    if event.modifierFlags.contains(.shift) {
+      return .input("|")
+    }
+
+    switch self.mode {
+    case .ja:
+      if event.modifierFlags.contains(.option) {
+        return .input("\\")
+      } else {
+        return .input("¥")
+      }
+    case .en:
+      if event.modifierFlags.contains(.option) {
+        return .input("¥")
+      } else {
+        return .input("\\")
+      }
+    }
   }
 }
