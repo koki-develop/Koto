@@ -8,26 +8,12 @@
 import InputMethodKit
 import KanaKanjiConverterModuleWithDefaultDictionary
 
-var convertOptions: ConvertRequestOptions {
-  .withDefaultDictionary(
-    requireJapanesePrediction: false,
-    requireEnglishPrediction: false,
-    keyboardLanguage: .ja_JP,
-    learningType: .inputAndOutput,
-    memoryDirectoryURL: .cachesDirectory,
-    sharedContainerURL: .cachesDirectory,
-    zenzaiMode: .off,
-    metadata: .init()
-  )
-}
-
 @objc(KotoInputController)
 class KotoInputController: IMKInputController {
   let candidates: IMKCandidates
 
   @MainActor
-  let converter = KanaKanjiConverter(
-    dicdataStore: DicdataStore(convertRequestOptions: convertOptions))
+  let converter = KanaKanjiConverter()
 
   var state: InputState = .normal
   var mode: InputMode = .ja
@@ -190,10 +176,7 @@ class KotoInputController: IMKInputController {
 
   @MainActor
   override func candidates(_ sender: Any!) -> [Any]! {
-    let results = self.converter.requestCandidates(
-      self.composingText.prefixToCursorPosition(),
-      options: convertOptions
-    )
+    let results = self.converter.convert(self.composingText.prefixToCursorPosition())
     self.currentCandidates = results.mainResults
     return self.currentCandidates.map { $0.text }
   }
