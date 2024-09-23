@@ -35,6 +35,8 @@ $ brew update
 $ brew upgrade koki-develop/tap/koto
 ```
 
+その後、 Mac を再起動もしくはログアウトしてログインし直してください。
+
 ## ライセンス
 
 [MIT](./LICENSE)
