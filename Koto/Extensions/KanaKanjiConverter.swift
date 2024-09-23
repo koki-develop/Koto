@@ -7,12 +7,13 @@
 
 import KanaKanjiConverterModuleWithDefaultDictionary
 
-private var convertOptions: ConvertRequestOptions {
-  .withDefaultDictionary(
+private func options(reset: Bool = false) -> ConvertRequestOptions {
+  return .withDefaultDictionary(
     requireJapanesePrediction: false,
     requireEnglishPrediction: false,
     keyboardLanguage: .ja_JP,
     learningType: .inputAndOutput,
+    shouldResetMemory: reset,
     memoryDirectoryURL: .cachesDirectory,
     sharedContainerURL: .cachesDirectory,
     zenzaiMode: .off,
@@ -22,15 +23,19 @@ private var convertOptions: ConvertRequestOptions {
 
 extension KanaKanjiConverter {
   convenience init() {
-    let dicdataStore = DicdataStore(convertRequestOptions: convertOptions)
+    let dicdataStore = DicdataStore(convertRequestOptions: options())
     self.init(dicdataStore: dicdataStore)
   }
 
   func convert(_ composingText: ComposingText) -> ConversionResult {
-    return self.requestCandidates(composingText, options: convertOptions)
+    return self.requestCandidates(composingText, options: options())
   }
 
   func saveLearningData() {
     self.sendToDicdataStore(.closeKeyboard)
+  }
+
+  func resetLearningData() {
+    self.sendToDicdataStore(.setRequestOptions(options(reset: true)))
   }
 }
