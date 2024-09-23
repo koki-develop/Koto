@@ -1,0 +1,12 @@
+/*
+  InfoPlist.strings
+  Koto
+
+  Created by koki sato on 2024/09/23.
+
+*/
+
+CFBundleName = "Koto";
+
+com.apple.inputmethod.Roman = "英数 (Koto)";
+com.apple.inputmethod.Japanese = "ひらがな (Koto)";
