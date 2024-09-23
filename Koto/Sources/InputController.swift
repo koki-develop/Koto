@@ -11,6 +11,7 @@ import KanaKanjiConverterModuleWithDefaultDictionary
 @objc(KotoInputController)
 class KotoInputController: IMKInputController {
   let candidates: IMKCandidates
+  let appMenu = NSMenu()
 
   @MainActor
   let converter = KanaKanjiConverter()
@@ -22,9 +23,18 @@ class KotoInputController: IMKInputController {
   var selectingCandidate: Candidate?
 
   override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
+    self.appMenu.addItem(
+      NSMenuItem(
+        title: "学習データをリセット", action: #selector(self.resetLearningData(_:)), keyEquivalent: ""
+      ))
+
     self.candidates = IMKCandidates(
       server: server, panelType: kIMKSingleColumnScrollingCandidatePanel)
     super.init(server: server, delegate: delegate, client: inputClient)
+  }
+
+  override func menu() -> NSMenu! {
+    return self.appMenu
   }
 
   override func setValue(_ value: Any!, forTag tag: Int, client sender: Any!) {
@@ -285,5 +295,10 @@ class KotoInputController: IMKInputController {
     self.composingText.stopComposition()
     self.currentCandidates = []
     self.selectingCandidate = nil
+  }
+
+  @objc @MainActor
+  func resetLearningData(_ sender: Any) {
+    self.converter.resetLearningData()
   }
 }
