@@ -306,6 +306,10 @@ class KotoInputController: IMKInputController {
   }
 
   private func getEventType(_ event: NSEvent) -> EventType? {
+    if event.type != .keyDown {
+      return nil
+    }
+
     if event.modifierFlags.contains(.command) {
       return nil
     }
