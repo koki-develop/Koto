@@ -42,17 +42,15 @@ class KotoInputController: IMKInputController {
   override func setValue(_ value: Any!, forTag tag: Int, client sender: Any!) {
     NSLog("KotoInputController setValue (tag: \(tag), value: \(String(describing: value))")
 
-    guard let value = value as? NSString else {
-      return
-    }
-
-    switch value {
-    case "com.apple.inputmethod.Japanese":
-      self.mode = .ja
-    case "com.apple.inputmethod.Roman":
-      self.mode = .en
-    default:
-      break
+    if let value = value as? NSString {
+      switch value {
+      case "com.apple.inputmethod.Japanese":
+        self.mode = .ja
+      case "com.apple.inputmethod.Roman":
+        self.mode = .en
+      default:
+        break
+      }
     }
 
     super.setValue(value, forTag: tag, client: sender)
