@@ -23,6 +23,8 @@ class KotoInputController: IMKInputController {
   var selectingCandidate: Candidate?
 
   override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
+    NSLog("KotoInputController init")
+
     self.appMenu.addItem(
       NSMenuItem(
         title: "学習データをリセット", action: #selector(self.resetLearningData(_:)), keyEquivalent: ""
@@ -38,6 +40,8 @@ class KotoInputController: IMKInputController {
   }
 
   override func setValue(_ value: Any!, forTag tag: Int, client sender: Any!) {
+    NSLog("KotoInputController setValue (tag: \(tag), value: \(String(describing: value))")
+
     guard let value = value as? NSString else {
       return
     }
@@ -56,6 +60,8 @@ class KotoInputController: IMKInputController {
 
   @MainActor
   override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
+    NSLog("KotoInputController handle (event: \(String(describing: event)))")
+
     guard let eventType = self.getEventType(event) else {
       return false
     }
@@ -215,6 +221,8 @@ class KotoInputController: IMKInputController {
 
   @MainActor
   override func deactivateServer(_ sender: Any!) {
+    NSLog("KotoInputController deactivateServer")
+
     self.insertSelectingCandidate()
     self.insertComposingText()
     self.clear()

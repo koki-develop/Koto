@@ -25,6 +25,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   var server = IMKServer()
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    NSLog("AppDelegate applicationDidFinishLaunching")
+
     self.server = IMKServer(
       name: Bundle.main.infoDictionary?["InputMethodConnectionName"] as? String,
       bundleIdentifier: Bundle.main.bundleIdentifier
