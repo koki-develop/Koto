@@ -32,6 +32,7 @@ class KotoInputController: IMKInputController {
 
     self.candidates = IMKCandidates(
       server: server, panelType: kIMKSingleColumnScrollingCandidatePanel)
+
     super.init(server: server, delegate: delegate, client: inputClient)
   }
 
@@ -230,10 +231,7 @@ class KotoInputController: IMKInputController {
   }
 
   private func setMarkedText(_ text: Any!) {
-    guard let client = self.client() else {
-      return
-    }
-    client.setMarkedText(text, selectionRange: .notFound, replacementRange: .notFound)
+    self.client().setMarkedText(text, selectionRange: .notFound, replacementRange: .notFound)
   }
 
   private func underlineAttributes() -> [NSAttributedString.Key: Any]? {
@@ -269,10 +267,7 @@ class KotoInputController: IMKInputController {
   }
 
   private func insertText(_ text: String) {
-    guard let client = self.client() else {
-      return
-    }
-    client.insertText(text, replacementRange: NSRange(location: NSNotFound, length: NSNotFound))
+    self.client().insertText(text, replacementRange: NSRange(location: NSNotFound, length: NSNotFound))
   }
 
   private func insertComposingText() {
