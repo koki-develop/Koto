@@ -11,7 +11,8 @@ tasks:
           -project ./Koto.xcodeproj \
           -scheme Koto \
           -configuration {{.CONFIGURATION}} \
-          CONFIGURATION_BUILD_DIR="$(pwd)/build/\$(CONFIGURATION)"
+          CONFIGURATION_BUILD_DIR="$(pwd)/build/\$(CONFIGURATION)" \
+          CODE_SIGNING_ALLOWED=NO
 
   build:release:
     cmds:
