@@ -17,12 +17,10 @@
 		E77175892C97FF960055553D /* InputState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77175882C97FF960055553D /* InputState.swift */; };
 		E771758B2C986B150055553D /* ComposingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E771758A2C986B150055553D /* ComposingText.swift */; };
 		E77682262C99A9D300E23949 /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77682252C99A9D300E23949 /* NSRange.swift */; };
-		E779B5EC2C9B8E2F00DDB3D5 /* InputMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E779B5EB2C9B8E2F00DDB3D5 /* InputMode.swift */; };
 		E79DC27C2CA22DDD00F5281E /* KeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79DC27B2CA22DDD00F5281E /* KeyCodes.swift */; };
 		E79DC27E2CA22EC600F5281E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79DC27D2CA22EC600F5281E /* Utils.swift */; };
 		E7A541872C9F06E300655653 /* KanaKanjiConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A541862C9F06E300655653 /* KanaKanjiConverter.swift */; };
 		E7B22F9E2C9AF8310002F84B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B22F9D2C9AF8310002F84B /* String.swift */; };
-		E7B22FA02C9B0B5F0002F84B /* en.svg in Resources */ = {isa = PBXBuildFile; fileRef = E7B22F9F2C9B0B5F0002F84B /* en.svg */; };
 		E7E6D3C32C971E9700DC00CC /* KanaKanjiConverterModule in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C22C971E9700DC00CC /* KanaKanjiConverterModule */; };
 		E7E6D3C52C971E9700DC00CC /* KanaKanjiConverterModuleWithDefaultDictionary in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C42C971E9700DC00CC /* KanaKanjiConverterModuleWithDefaultDictionary */; };
 		E7E6D3C72C971E9700DC00CC /* SwiftUtils in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C62C971E9700DC00CC /* SwiftUtils */; };
@@ -42,12 +40,10 @@
 		E77175882C97FF960055553D /* InputState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputState.swift; sourceTree = "<group>"; };
 		E771758A2C986B150055553D /* ComposingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposingText.swift; sourceTree = "<group>"; };
 		E77682252C99A9D300E23949 /* NSRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRange.swift; sourceTree = "<group>"; };
-		E779B5EB2C9B8E2F00DDB3D5 /* InputMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMode.swift; sourceTree = "<group>"; };
 		E79DC27B2CA22DDD00F5281E /* KeyCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCodes.swift; sourceTree = "<group>"; };
 		E79DC27D2CA22EC600F5281E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		E7A541862C9F06E300655653 /* KanaKanjiConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaKanjiConverter.swift; sourceTree = "<group>"; };
 		E7B22F9D2C9AF8310002F84B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		E7B22F9F2C9B0B5F0002F84B /* en.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = en.svg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +102,6 @@
 		E703A6C42C9716E000C72F87 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E7B22F9F2C9B0B5F0002F84B /* en.svg */,
 				E767473E2C9A441B006BFC98 /* ja.svg */,
 			);
 			path = Resources;
@@ -119,7 +114,6 @@
 				E703A6CE2C97184E00C72F87 /* InputController.swift */,
 				E746EF022C97FA7600E05D92 /* EventType.swift */,
 				E77175882C97FF960055553D /* InputState.swift */,
-				E779B5EB2C9B8E2F00DDB3D5 /* InputMode.swift */,
 				E79DC27B2CA22DDD00F5281E /* KeyCodes.swift */,
 				E79DC27D2CA22EC600F5281E /* Utils.swift */,
 			);
@@ -208,7 +202,6 @@
 				E75D56702CA169E000EB0CF9 /* InfoPlist.strings in Resources */,
 				E703A6BD2C97157F00C72F87 /* Preview Assets.xcassets in Resources */,
 				E703A6BA2C97157F00C72F87 /* Assets.xcassets in Resources */,
-				E7B22FA02C9B0B5F0002F84B /* en.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,7 +213,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E703A6CF2C97184E00C72F87 /* InputController.swift in Sources */,
-				E779B5EC2C9B8E2F00DDB3D5 /* InputMode.swift in Sources */,
 				E79DC27C2CA22DDD00F5281E /* KeyCodes.swift in Sources */,
 				E746EF032C97FA7600E05D92 /* EventType.swift in Sources */,
 				E77175892C97FF960055553D /* InputState.swift in Sources */,

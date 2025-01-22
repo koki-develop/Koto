@@ -15,15 +15,6 @@
 				<key>tsInputModeMenuIconFileKey</key>
 				<string>ja.svg</string>
 			</dict>
-			<key>com.apple.inputmethod.Roman</key>
-			<dict>
-				<key>TISIntendedLanguage</key>
-				<string>en</string>
-				<key>tsInputModeAlternateMenuIconFileKey</key>
-				<string>en.svg</string>
-				<key>tsInputModeMenuIconFileKey</key>
-				<string>en.svg</string>
-			</dict>
 		</dict>
 	</dict>
 	<key>InputMethodConnectionName</key>

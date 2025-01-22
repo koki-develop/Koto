@@ -2,9 +2,6 @@
 
 <p align="center">
   <img src="./Koto/Resources/ja.svg" width="100px">
-  &nbsp;
-  &nbsp;
-  <img src="./Koto/Resources/en.svg" width="100px">
 </p>
 
 <p align="center">

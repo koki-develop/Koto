@@ -17,7 +17,6 @@ class KotoInputController: IMKInputController {
   let converter = KanaKanjiConverter()
 
   var state: InputState = .normal
-  var mode: InputMode = .ja
   var composingText: ComposingText = ComposingText()
   var currentCandidates: [Candidate] = []
   var selectingCandidate: Candidate?
@@ -40,23 +39,6 @@ class KotoInputController: IMKInputController {
     return self.appMenu
   }
 
-  override func setValue(_ value: Any!, forTag tag: Int, client sender: Any!) {
-    NSLog("KotoInputController setValue (tag: \(tag), value: \(String(describing: value))")
-
-    if let value = value as? NSString {
-      switch value {
-      case "com.apple.inputmethod.Japanese":
-        self.mode = .ja
-      case "com.apple.inputmethod.Roman":
-        self.mode = .en
-      default:
-        break
-      }
-    }
-
-    super.setValue(value, forTag: tag, client: sender)
-  }
-
   @MainActor
   override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
     NSLog("KotoInputController handle (event: \(String(describing: event)))")
@@ -73,20 +55,11 @@ class KotoInputController: IMKInputController {
       fallthrough
 
     case (.input(let text), .normal):
-      if self.mode == .en {
-        self.insertText(text)
-        return true
-      }
       self.state = .composing
       fallthrough
 
     case (.input(let text), .composing):
-      switch self.mode {
-      case .ja:
-        self.composingText.append(text, inputStyle: .roman2kana)
-      case .en:
-        self.composingText.append(text, inputStyle: .direct)
-      }
+      self.composingText.append(text, inputStyle: .roman2kana)
       self.setComposingMarkedText()
       return true
 
@@ -106,12 +79,7 @@ class KotoInputController: IMKInputController {
       return false
 
     case (.space, .normal):
-      switch self.mode {
-      case .ja:
-        self.insertText("　")
-      case .en:
-        self.insertText(" ")
-      }
+      self.insertText("　")
       return true
 
     case (.space, .composing), (.down, .composing):
@@ -374,19 +342,10 @@ class KotoInputController: IMKInputController {
       return .input("|")
     }
 
-    switch self.mode {
-    case .ja:
-      if event.modifierFlags.contains(.option) {
-        return .input("\\")
-      } else {
-        return .input("¥")
-      }
-    case .en:
-      if event.modifierFlags.contains(.option) {
-        return .input("¥")
-      } else {
-        return .input("\\")
-      }
+    if event.modifierFlags.contains(.option) {
+      return .input("\\")
+    } else {
+      return .input("¥")
     }
   }
 }
