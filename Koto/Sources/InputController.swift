@@ -235,7 +235,8 @@ class KotoInputController: IMKInputController {
   }
 
   private func insertText(_ text: String) {
-    self.client().insertText(text, replacementRange: NSRange(location: NSNotFound, length: NSNotFound))
+    self.client().insertText(
+      text, replacementRange: NSRange(location: NSNotFound, length: NSNotFound))
   }
 
   private func insertComposingText() {
