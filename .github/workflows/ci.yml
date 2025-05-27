@@ -1,0 +1,51 @@
+name: CI
+
+permissions: {}
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    timeout-minutes: 10
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project ./Koto.xcodeproj \
+            -scheme Koto \
+            -configuration Release \
+            -arch arm64 -arch x86_64 \
+            ONLY_ACTIVE_ARCH=NO \
+            CONFIGURATION_BUILD_DIR="$(pwd)/build/\$(CONFIGURATION)" \
+            CODE_SIGNING_ALLOWED=NO
+          mkdir -p ./tmp/app
+          mv ./build/Release/Koto.app ./tmp/app/
+
+      - name: Build Package
+        run: |
+          xcrun pkgbuild \
+            --root ./tmp/app \
+            --component-plist ./pkg.plist \
+            --identifier me.koki.inputmethod.Koto \
+            --install-location '/Library/Input Methods' \
+            ./tmp/tmp.pkg
+
+      - name: Build Installer
+        run: |
+          xcrun productbuild \
+            --distribution distribution.xml \
+            --package-path ./tmp \
+            ./tmp/Koto.pkg
