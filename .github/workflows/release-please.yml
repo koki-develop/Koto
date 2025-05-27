@@ -1,15 +1,32 @@
-name: Release
-run-name: Release ${{ github.ref_name }}
+name: Release Please
 
 permissions: {}
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
 
 jobs:
+  release-please:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    outputs:
+      should-release: ${{ steps.release-please.outputs.release_created }}
+    steps:
+      - uses: googleapis/release-please-action@a02a34c4d625f9be7cb89156071d8567266a2445 # v4.2.0
+        id: release-please
+        with:
+          release-type: simple
+          token: ${{ github.token }}
+
   build:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.should-release == 'true' }}
     timeout-minutes: 10
     runs-on: macos-latest
     permissions:
