@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.3](https://github.com/koki-develop/Koto/compare/v0.5.2...v0.5.3) (2025-05-27)
+
+
+### Bug Fixes
+
+* Set tag_name ([f88edc6](https://github.com/koki-develop/Koto/commit/f88edc6d9bf7c0b76c985a321ccc40be2865abd7))
+
 ## [0.5.2](https://github.com/koki-develop/Koto/compare/v0.5.1...v0.5.2) (2025-05-27)
 
 
