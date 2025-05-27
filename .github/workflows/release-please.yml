@@ -16,6 +16,7 @@ jobs:
       pull-requests: write
       issues: write
     outputs:
+      version: ${{ steps.release-please.outputs.tag_name }}
       should-release: ${{ steps.release-please.outputs.release_created }}
     steps:
       - uses: googleapis/release-please-action@a02a34c4d625f9be7cb89156071d8567266a2445 # v4.2.0
@@ -86,7 +87,9 @@ jobs:
           files: ./tmp/Koto.pkg
 
   release-cask:
-    needs: release
+    needs:
+      - release
+      - release-please
     timeout-minutes: 10
     runs-on: ubuntu-latest
     permissions:
@@ -111,12 +114,11 @@ jobs:
       - name: Metadata
         id: metadata
         env:
-          GITHUB_REF_NAME: ${{ github.ref_name }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          VERSION: ${{ needs.release-please.outputs.version }}
           GH_TOKEN: ${{ github.token }}
         run: |
           {
-            echo "version=${GITHUB_REF_NAME#v}"
+            echo "version=${VERSION#v}"
             echo "sha256=$(shasum -a 256 ./tmp/Koto.pkg | awk '{print $1}')"
             echo "desc=$(gh repo view "$GITHUB_REPOSITORY" --json description --jq .description)"
           } >> "$GITHUB_OUTPUT"
