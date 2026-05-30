@@ -27,7 +27,7 @@ runs:
         KOTO_DESC: ${{ inputs.desc }}
         KOTO_OUTPUT_PATH: ${{ inputs.output-path }}
       run: |
-        cat <<EOF > $KOTO_OUTPUT_PATH
+        cat <<EOF > "$KOTO_OUTPUT_PATH"
         cask "koto" do
           version "${KOTO_VERSION}"
           url "https://github.com/${KOTO_REPO}/releases/download/v#{version}/Koto.pkg"
@@ -43,4 +43,4 @@ runs:
         end
         EOF
 
-        cat $KOTO_OUTPUT_PATH
+        cat "$KOTO_OUTPUT_PATH"
