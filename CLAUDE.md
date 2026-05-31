@@ -19,43 +19,18 @@ Requires [Task](https://taskfile.dev) CLI runner.
 | `task uninstall` | Remove from Input Methods and kill process |
 | `task stop` | `pkill Koto` |
 | `task clean` | Remove `./build` directory |
-| `task fmt` | Format with `swift-format --recursive --in-place .` |
+| `task fmt` | Format with `swift-format format --recursive --in-place .` |
 
 No test suite exists.
 
-## Architecture
+## Project Structure
 
-### Project Structure
+Two targets, each with its own `CLAUDE.md` covering the details:
 
-The IME logic lives in a local Swift package, `KotoCore` (`KotoCore/Sources/KotoCore/`), which the Xcode project references as a local package. The external dependency `AzooKeyKanaKanjiConverter` is declared in `KotoCore/Package.swift` (pinned by revision), so dependency updates are made there rather than in the Xcode project. The app target (`Koto/`) holds only `App.swift`, `Info.plist`, entitlements, and resources. All components and extensions listed below live in `KotoCore` except `App.swift`, which stays in the app target.
+- **`Koto/`** — the app target (`@main` entry point, `Info.plist`, entitlements, resources). See `Koto/CLAUDE.md`.
+- **`KotoCore/`** — local SwiftPM package holding all IME logic. The Xcode project references it as a local package, and the external `AzooKeyKanaKanjiConverter` dependency is declared in `KotoCore/Package.swift` (pinned by revision) rather than in the Xcode project. See `KotoCore/CLAUDE.md`.
 
-### State Machine
-
-The IME operates as a three-state machine (`InputState.swift`):
-- **`.normal`** → No active input
-- **`.composing`** → Romaji being typed, converted to kana in real-time
-- **`.selecting`** → Candidate list visible for kanji selection
-
-### Core Components
-
-- **`App.swift`** — `@main` entry point. Sets up `IMKServer` connecting the IME to macOS.
-- **`InputController.swift`** — Central event handler (`IMKInputController` subclass). Routes `NSEvent` through `(EventType, InputState)` pattern matching to determine actions. This is the main logic hub.
-- **`EventType.swift`** — Classifies keyboard events (printable, space, enter, backspace, arrows, etc.).
-- **`KeyCodes.swift`** — Raw macOS key code constants.
-
-### Extensions (wrapping third-party types)
-
-- **`ComposingText.swift`** — Romaji-to-kana conversion with halfwidth→fullwidth mapping and "ん" edge case handling.
-- **`KanaKanjiConverter.swift`** — Configures converter with `ja_JP`, manages learning data persistence in user caches directory.
-
-### Key Event Routing (InputController)
-
-The `handle(_:client:)` method dispatches based on `(EventType, InputState)` tuples. Key behaviors:
-- Printable chars in normal/composing → append to `ComposingText`
-- Space/Down in composing → switch to `.selecting`
-- Enter in composing → insert as-is; in selecting → confirm candidate
-- Ctrl+K → convert to katakana
-- Shift+Left/Right in selecting → resize conversion segment
+Dependency updates and IME behavior changes happen in `KotoCore`; the app target only bootstraps the `IMKServer`.
 
 ## CI/CD
 
