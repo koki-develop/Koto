@@ -9,7 +9,7 @@ import InputMethodKit
 import KanaKanjiConverterModuleWithDefaultDictionary
 
 @objc(KotoInputController)
-class KotoInputController: IMKInputController {
+public class KotoInputController: IMKInputController {
   let candidates: IMKCandidates
   let appMenu = NSMenu()
 
@@ -21,7 +21,7 @@ class KotoInputController: IMKInputController {
   var currentCandidates: [Candidate] = []
   var selectingCandidate: Candidate?
 
-  override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
+  public override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
     NSLog("KotoInputController init")
 
     self.appMenu.addItem(
@@ -35,12 +35,12 @@ class KotoInputController: IMKInputController {
     super.init(server: server, delegate: delegate, client: inputClient)
   }
 
-  override func menu() -> NSMenu! {
+  public override func menu() -> NSMenu! {
     return self.appMenu
   }
 
   @MainActor
-  override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
+  public override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
     NSLog("KotoInputController handle (event: \(String(describing: event)))")
 
     guard let eventType = self.getEventType(event) else {
@@ -160,14 +160,14 @@ class KotoInputController: IMKInputController {
   }
 
   @MainActor
-  override func candidates(_ sender: Any!) -> [Any]! {
+  public override func candidates(_ sender: Any!) -> [Any]! {
     let results = self.converter.convert(self.composingText.prefixToCursorPosition())
     self.currentCandidates = results.mainResults
     return self.currentCandidates.map { $0.text }
   }
 
   @MainActor
-  override func candidateSelected(_ candidateString: NSAttributedString!) {
+  public override func candidateSelected(_ candidateString: NSAttributedString!) {
     self.insertSelectingCandidate()
 
     if self.composingText.isEmpty {
@@ -177,7 +177,7 @@ class KotoInputController: IMKInputController {
     }
   }
 
-  override func candidateSelectionChanged(_ candidateString: NSAttributedString!) {
+  public override func candidateSelectionChanged(_ candidateString: NSAttributedString!) {
     guard let candidate = currentCandidates.first(where: { $0.text == candidateString.string })
     else {
       return
@@ -187,7 +187,7 @@ class KotoInputController: IMKInputController {
   }
 
   @MainActor
-  override func deactivateServer(_ sender: Any!) {
+  public override func deactivateServer(_ sender: Any!) {
     NSLog("KotoInputController deactivateServer")
 
     self.insertSelectingCandidate()
