@@ -25,6 +25,10 @@ No test suite exists.
 
 ## Architecture
 
+### Project Structure
+
+The IME logic lives in a local Swift package, `KotoCore` (`KotoCore/Sources/KotoCore/`), which the Xcode project references as a local package. The external dependency `AzooKeyKanaKanjiConverter` is declared in `KotoCore/Package.swift` (pinned by revision), so dependency updates are made there rather than in the Xcode project. The app target (`Koto/`) holds only `App.swift`, `Info.plist`, entitlements, and resources. All components and extensions listed below live in `KotoCore` except `App.swift`, which stays in the app target.
+
 ### State Machine
 
 The IME operates as a three-state machine (`InputState.swift`):
