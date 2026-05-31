@@ -7,23 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		26FE1D30C0FDD794B1FD4A2C /* KotoCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6BE881566E9D26E888337CB7 /* KotoCore */; };
 		E703A6BA2C97157F00C72F87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E703A6B92C97157F00C72F87 /* Assets.xcassets */; };
 		E703A6BD2C97157F00C72F87 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E703A6BC2C97157F00C72F87 /* Preview Assets.xcassets */; };
 		E703A6CD2C9717C600C72F87 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = E703A6CC2C9717C600C72F87 /* App.swift */; };
-		E703A6CF2C97184E00C72F87 /* InputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E703A6CE2C97184E00C72F87 /* InputController.swift */; };
-		E746EF032C97FA7600E05D92 /* EventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E746EF022C97FA7600E05D92 /* EventType.swift */; };
 		E75D56702CA169E000EB0CF9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E75D566E2CA169E000EB0CF9 /* InfoPlist.strings */; };
 		E767473F2C9A441B006BFC98 /* ja.svg in Resources */ = {isa = PBXBuildFile; fileRef = E767473E2C9A441B006BFC98 /* ja.svg */; };
-		E77175892C97FF960055553D /* InputState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77175882C97FF960055553D /* InputState.swift */; };
-		E771758B2C986B150055553D /* ComposingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E771758A2C986B150055553D /* ComposingText.swift */; };
-		E77682262C99A9D300E23949 /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77682252C99A9D300E23949 /* NSRange.swift */; };
-		E79DC27C2CA22DDD00F5281E /* KeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79DC27B2CA22DDD00F5281E /* KeyCodes.swift */; };
-		E79DC27E2CA22EC600F5281E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79DC27D2CA22EC600F5281E /* Utils.swift */; };
-		E7A541872C9F06E300655653 /* KanaKanjiConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A541862C9F06E300655653 /* KanaKanjiConverter.swift */; };
-		E7B22F9E2C9AF8310002F84B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B22F9D2C9AF8310002F84B /* String.swift */; };
-		E7E6D3C32C971E9700DC00CC /* KanaKanjiConverterModule in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C22C971E9700DC00CC /* KanaKanjiConverterModule */; };
-		E7E6D3C52C971E9700DC00CC /* KanaKanjiConverterModuleWithDefaultDictionary in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C42C971E9700DC00CC /* KanaKanjiConverterModuleWithDefaultDictionary */; };
-		E7E6D3C72C971E9700DC00CC /* SwiftUtils in Frameworks */ = {isa = PBXBuildFile; productRef = E7E6D3C62C971E9700DC00CC /* SwiftUtils */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,17 +22,8 @@
 		E703A6BE2C97157F00C72F87 /* Koto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Koto.entitlements; sourceTree = "<group>"; };
 		E703A6C72C97173600C72F87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E703A6CC2C9717C600C72F87 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
-		E703A6CE2C97184E00C72F87 /* InputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputController.swift; sourceTree = "<group>"; };
-		E746EF022C97FA7600E05D92 /* EventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventType.swift; sourceTree = "<group>"; };
 		E75D566F2CA169E000EB0CF9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E767473E2C9A441B006BFC98 /* ja.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ja.svg; sourceTree = "<group>"; };
-		E77175882C97FF960055553D /* InputState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputState.swift; sourceTree = "<group>"; };
-		E771758A2C986B150055553D /* ComposingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposingText.swift; sourceTree = "<group>"; };
-		E77682252C99A9D300E23949 /* NSRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRange.swift; sourceTree = "<group>"; };
-		E79DC27B2CA22DDD00F5281E /* KeyCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCodes.swift; sourceTree = "<group>"; };
-		E79DC27D2CA22EC600F5281E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		E7A541862C9F06E300655653 /* KanaKanjiConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaKanjiConverter.swift; sourceTree = "<group>"; };
-		E7B22F9D2C9AF8310002F84B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,9 +31,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7E6D3C72C971E9700DC00CC /* SwiftUtils in Frameworks */,
-				E7E6D3C52C971E9700DC00CC /* KanaKanjiConverterModuleWithDefaultDictionary in Frameworks */,
-				E7E6D3C32C971E9700DC00CC /* KanaKanjiConverterModule in Frameworks */,
+				26FE1D30C0FDD794B1FD4A2C /* KotoCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +62,6 @@
 				E703A6BE2C97157F00C72F87 /* Koto.entitlements */,
 				E703A6B92C97157F00C72F87 /* Assets.xcassets */,
 				E703A6C82C97175900C72F87 /* Sources */,
-				E77682242C99A92C00E23949 /* Extensions */,
 				E703A6C42C9716E000C72F87 /* Resources */,
 				E703A6BB2C97157F00C72F87 /* Preview Content */,
 			);
@@ -111,24 +88,8 @@
 			isa = PBXGroup;
 			children = (
 				E703A6CC2C9717C600C72F87 /* App.swift */,
-				E703A6CE2C97184E00C72F87 /* InputController.swift */,
-				E746EF022C97FA7600E05D92 /* EventType.swift */,
-				E77175882C97FF960055553D /* InputState.swift */,
-				E79DC27B2CA22DDD00F5281E /* KeyCodes.swift */,
-				E79DC27D2CA22EC600F5281E /* Utils.swift */,
 			);
 			path = Sources;
-			sourceTree = "<group>";
-		};
-		E77682242C99A92C00E23949 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				E771758A2C986B150055553D /* ComposingText.swift */,
-				E77682252C99A9D300E23949 /* NSRange.swift */,
-				E7B22F9D2C9AF8310002F84B /* String.swift */,
-				E7A541862C9F06E300655653 /* KanaKanjiConverter.swift */,
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,9 +109,7 @@
 			);
 			name = Koto;
 			packageProductDependencies = (
-				E7E6D3C22C971E9700DC00CC /* KanaKanjiConverterModule */,
-				E7E6D3C42C971E9700DC00CC /* KanaKanjiConverterModuleWithDefaultDictionary */,
-				E7E6D3C62C971E9700DC00CC /* SwiftUtils */,
+				6BE881566E9D26E888337CB7 /* KotoCore */,
 			);
 			productName = Koto;
 			productReference = E703A6B22C97157E00C72F87 /* Koto.app */;
@@ -182,7 +141,7 @@
 			);
 			mainGroup = E703A6A92C97157E00C72F87;
 			packageReferences = (
-				E7E6D3C12C971E9700DC00CC /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */,
+				C931BF558E2E8C322D5A1B63 /* XCLocalSwiftPackageReference "KotoCore" */,
 			);
 			productRefGroup = E703A6B32C97157E00C72F87 /* Products */;
 			projectDirPath = "";
@@ -212,15 +171,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E703A6CF2C97184E00C72F87 /* InputController.swift in Sources */,
-				E79DC27C2CA22DDD00F5281E /* KeyCodes.swift in Sources */,
-				E746EF032C97FA7600E05D92 /* EventType.swift in Sources */,
-				E77175892C97FF960055553D /* InputState.swift in Sources */,
-				E77682262C99A9D300E23949 /* NSRange.swift in Sources */,
-				E771758B2C986B150055553D /* ComposingText.swift in Sources */,
-				E79DC27E2CA22EC600F5281E /* Utils.swift in Sources */,
-				E7B22F9E2C9AF8310002F84B /* String.swift in Sources */,
-				E7A541872C9F06E300655653 /* KanaKanjiConverter.swift in Sources */,
 				E703A6CD2C9717C600C72F87 /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -449,32 +399,18 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		E7E6D3C12C971E9700DC00CC /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter";
-			requirement = {
-				kind = revision;
-				revision = ea4093aa99f4c8a4d5b0918a7dcae6346c8da142;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		C931BF558E2E8C322D5A1B63 /* XCLocalSwiftPackageReference "KotoCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = KotoCore;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E7E6D3C22C971E9700DC00CC /* KanaKanjiConverterModule */ = {
+		6BE881566E9D26E888337CB7 /* KotoCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E7E6D3C12C971E9700DC00CC /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */;
-			productName = KanaKanjiConverterModule;
-		};
-		E7E6D3C42C971E9700DC00CC /* KanaKanjiConverterModuleWithDefaultDictionary */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E7E6D3C12C971E9700DC00CC /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */;
-			productName = KanaKanjiConverterModuleWithDefaultDictionary;
-		};
-		E7E6D3C62C971E9700DC00CC /* SwiftUtils */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E7E6D3C12C971E9700DC00CC /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */;
-			productName = SwiftUtils;
+			package = C931BF558E2E8C322D5A1B63 /* XCLocalSwiftPackageReference "KotoCore" */;
+			productName = KotoCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

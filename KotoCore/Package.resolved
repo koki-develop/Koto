@@ -1,5 +1,4 @@
 {
-  "originHash" : "0e798326c262bd3f82ecb785f6cec9099b38495691e46f1f6c08f6ed17a036ee",
   "pins" : [
     {
       "identity" : "azookeykanakanjiconverter",
@@ -46,5 +45,5 @@
       }
     }
   ],
-  "version" : 3
+  "version" : 2
 }
