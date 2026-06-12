@@ -10,11 +10,22 @@ import KanaKanjiConverterModuleWithDefaultDictionary
 
 @objc(KotoInputController)
 public class KotoInputController: IMKInputController {
-  let candidates: IMKCandidates
-  let appMenu = NSMenu()
+  // IMKInputController はクライアント(アプリ)ごとに生成・破棄されるため、
+  // IMKCandidates と KanaKanjiConverter はコントローラに持たせず全体で共有する。
+  // インスタンスごとに生成すると、破棄済み IMKCandidates への参照を IMK 内部が
+  // 触って SIGSEGV する(macOS 26 の _IMKServerLegacy)ほか、辞書の重複ロードと
+  // 同一ディレクトリへの学習データ多重書き込みが起きる。
+  static var sharedCandidates: IMKCandidates!
 
   @MainActor
-  let converter = KanaKanjiConverter()
+  static let sharedConverter = KanaKanjiConverter()
+
+  var candidates: IMKCandidates { Self.sharedCandidates }
+
+  @MainActor
+  var converter: KanaKanjiConverter { Self.sharedConverter }
+
+  let appMenu = NSMenu()
 
   var state: InputState = .normal
   var composingText: ComposingText = ComposingText()
@@ -29,8 +40,10 @@ public class KotoInputController: IMKInputController {
         title: "学習データをリセット", action: #selector(self.resetLearningData(_:)), keyEquivalent: ""
       ))
 
-    self.candidates = IMKCandidates(
-      server: server, panelType: kIMKSingleColumnScrollingCandidatePanel)
+    if Self.sharedCandidates == nil {
+      Self.sharedCandidates = IMKCandidates(
+        server: server, panelType: kIMKSingleColumnScrollingCandidatePanel)
+    }
 
     super.init(server: server, delegate: delegate, client: inputClient)
   }
@@ -41,8 +54,6 @@ public class KotoInputController: IMKInputController {
 
   @MainActor
   public override func handle(_ event: NSEvent!, client sender: Any!) -> Bool {
-    NSLog("KotoInputController handle (event: \(String(describing: event)))")
-
     guard let eventType = self.getEventType(event) else {
       return false
     }
@@ -186,14 +197,23 @@ public class KotoInputController: IMKInputController {
     self.setSelectingMarkedText()
   }
 
+  // フォーカス喪失やクリックで OS が未確定テキストの確定を要求したときに呼ばれる。
+  // super.commitComposition は呼ばない(切り替え時にハングする既知問題がある)。
+  @MainActor
+  public override func commitComposition(_ sender: Any!) {
+    self.insertSelectingCandidate()
+    self.insertComposingText()
+    self.resetState()
+  }
+
+  // deactivate 中のクライアントへの同期呼び出しは、切り替え先セッションの
+  // ブロッキングや IMK 内部のクラッシュの引き金になるため行わない。
+  // 未確定テキストの確定は commitComposition に任せる。
   @MainActor
   public override func deactivateServer(_ sender: Any!) {
     NSLog("KotoInputController deactivateServer")
 
-    self.insertSelectingCandidate()
-    self.insertComposingText()
-    self.clear()
-
+    self.resetState()
     self.converter.saveLearningData()
     super.deactivateServer(sender)
   }
@@ -261,6 +281,13 @@ public class KotoInputController: IMKInputController {
   @MainActor
   private func clear() {
     self.setMarkedText("")
+    self.resetState()
+  }
+
+  // クライアントへの呼び出しを伴わない状態リセット。deactivate 中など、
+  // クライアントに触れたくない場面では clear() ではなくこちらを使う。
+  @MainActor
+  private func resetState() {
     self.candidates.hide()
 
     self.state = .normal
