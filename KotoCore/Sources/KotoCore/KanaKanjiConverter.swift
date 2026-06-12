@@ -5,7 +5,25 @@
 //  Created by koki sato on 2024/09/21.
 //
 
+import Foundation
 import KanaKanjiConverterModuleWithDefaultDictionary
+
+private let kotoDirectoryURL = URL.applicationSupportDirectory
+  .appending(path: "Koto", directoryHint: .isDirectory)
+
+// 学習データの置き場。.cachesDirectory は OS にパージされうるため
+// Application Support 配下に置く。ディレクトリを用意できない場合のみ
+// 従来の .cachesDirectory にフォールバックする。
+private let memoryDirectoryURL: URL = {
+  let directoryURL = kotoDirectoryURL.appending(path: "memory", directoryHint: .isDirectory)
+  do {
+    try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+  } catch {
+    NSLog("Koto: failed to create learning data directory: \(error)")
+    return .cachesDirectory
+  }
+  return directoryURL
+}()
 
 private func options() -> ConvertRequestOptions {
   return ConvertRequestOptions(
@@ -13,8 +31,8 @@ private func options() -> ConvertRequestOptions {
     requireEnglishPrediction: false,
     keyboardLanguage: .ja_JP,
     learningType: .inputAndOutput,
-    memoryDirectoryURL: .cachesDirectory,
-    sharedContainerURL: .cachesDirectory,
+    memoryDirectoryURL: memoryDirectoryURL,
+    sharedContainerURL: kotoDirectoryURL,
     textReplacer: .empty,
     specialCandidateProviders: nil,
     zenzaiMode: .off,
