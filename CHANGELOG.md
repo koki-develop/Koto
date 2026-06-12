@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.5.4](https://github.com/koki-develop/Koto/compare/v0.5.3...v0.5.4) (2026-06-12)
+
+
+### Bug Fixes
+
+* stop per-controller IMKCandidates/converter and client IPC during deactivate ([22d639d](https://github.com/koki-develop/Koto/commit/22d639deae3b091c1a9cd394ed71eba5330d8350))
+* store learning data under Application Support instead of Caches ([eefe3ec](https://github.com/koki-develop/Koto/commit/eefe3eca5bb761eb3966ff1124c2677449b0fcd3))
+* update pkg.plist for AzooKeyKanaKanjiConverter v0.11.2 bundle layout ([486955e](https://github.com/koki-develop/Koto/commit/486955e17aef596ae2e995ec301ed84b240e659c))
+
 ## [0.5.3](https://github.com/koki-develop/Koto/compare/v0.5.2...v0.5.3) (2025-05-27)
 
 
