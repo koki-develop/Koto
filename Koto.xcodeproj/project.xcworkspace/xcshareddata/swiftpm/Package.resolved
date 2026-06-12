@@ -6,16 +6,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/azooKey/AzooKeyKanaKanjiConverter",
       "state" : {
-        "revision" : "ea4093aa99f4c8a4d5b0918a7dcae6346c8da142"
+        "revision" : "80b8204f1cdfb364bb2ed355cf52c7ebb2519a0c",
+        "version" : "0.11.2"
       }
     },
     {
-      "identity" : "llama.cpp",
+      "identity" : "jinja",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ensan-hcl/llama.cpp",
+      "location" : "https://github.com/johnmai-dev/Jinja",
       "state" : {
-        "branch" : "6b862f4",
-        "revision" : "6b862f4a00e20ac14341a5709977ebcd5adc5d7e"
+        "revision" : "31c4dd39bcdc07eaa42a384bdc88ea599022b800",
+        "version" : "1.1.2"
       }
     },
     {
@@ -43,6 +44,15 @@
       "state" : {
         "revision" : "0c0290ff6b24942dadb83a929ffaaa1481df04a2",
         "version" : "1.1.1"
+      }
+    },
+    {
+      "identity" : "swift-tokenizers",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ensan-hcl/swift-tokenizers",
+      "state" : {
+        "revision" : "4a606f66e0cc4d7d9f0197649e812f7fc86a4c34",
+        "version" : "0.0.1"
       }
     }
   ],

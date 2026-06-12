@@ -7,15 +7,16 @@
 
 import KanaKanjiConverterModuleWithDefaultDictionary
 
-private func options(reset: Bool = false) -> ConvertRequestOptions {
-  return .withDefaultDictionary(
+private func options() -> ConvertRequestOptions {
+  return ConvertRequestOptions(
     requireJapanesePrediction: false,
     requireEnglishPrediction: false,
     keyboardLanguage: .ja_JP,
     learningType: .inputAndOutput,
-    shouldResetMemory: reset,
     memoryDirectoryURL: .cachesDirectory,
     sharedContainerURL: .cachesDirectory,
+    textReplacer: .empty,
+    specialCandidateProviders: nil,
     zenzaiMode: .off,
     metadata: .init()
   )
@@ -23,8 +24,7 @@ private func options(reset: Bool = false) -> ConvertRequestOptions {
 
 extension KanaKanjiConverter {
   convenience init() {
-    let dicdataStore = DicdataStore(convertRequestOptions: options())
-    self.init(dicdataStore: dicdataStore)
+    self.init(dicdataStore: .withDefaultDictionary())
   }
 
   func convert(_ composingText: ComposingText) -> ConversionResult {
@@ -32,10 +32,17 @@ extension KanaKanjiConverter {
   }
 
   func saveLearningData() {
-    self.sendToDicdataStore(.closeKeyboard)
+    self.commitUpdateLearningData()
   }
 
   func resetLearningData() {
-    self.sendToDicdataStore(.setRequestOptions(options(reset: true)))
+    // 一度も変換していないと resetMemory() は memoryURL が nil のまま無音で
+    // 何もしないため、捨て変換で設定をシードしてからリセットする。
+    // (saveLearningData は保存対象が生じる時点で必ず変換済みのため不要)
+    var seed = ComposingText()
+    seed.insertAtCursorPosition("あ", inputStyle: .direct)
+    _ = self.convert(seed)
+    self.stopComposition()
+    self.resetMemory()
   }
 }

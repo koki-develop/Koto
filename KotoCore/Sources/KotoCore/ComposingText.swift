@@ -37,6 +37,11 @@ extension ComposingText {
         self.insertAtCursorPosition("n", inputStyle: .roman2kana)
       }
       self.insertAtCursorPosition(text, inputStyle: .roman2kana)
+
+    default:
+      // Koto は .direct / .roman2kana のみ使用する。カスタムテーブル等の
+      // 他スタイルは渡された style のまま挿入する。
+      self.insertAtCursorPosition(text, inputStyle: inputStyle)
     }
   }
 

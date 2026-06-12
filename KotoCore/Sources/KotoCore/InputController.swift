@@ -224,7 +224,7 @@ public class KotoInputController: IMKInputController {
     }
 
     var afterComposingText = self.composingText
-    afterComposingText.prefixComplete(correspondingCount: candidate.correspondingCount)
+    afterComposingText.prefixComplete(composingCount: candidate.composingCount)
 
     let text = NSMutableAttributedString(string: "")
     text.append(NSAttributedString(string: candidate.text, attributes: self.highlightAttributes()))
@@ -253,7 +253,7 @@ public class KotoInputController: IMKInputController {
     }
     self.insertText(candidate.text)
 
-    self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
+    self.composingText.prefixComplete(composingCount: candidate.composingCount)
     self.converter.setCompletedData(candidate)
     self.converter.updateLearningData(candidate)
   }

@@ -12,7 +12,7 @@ let package = Package(
   dependencies: [
     .package(
       url: "https://github.com/azooKey/AzooKeyKanaKanjiConverter",
-      revision: "ea4093aa99f4c8a4d5b0918a7dcae6346c8da142"
+      exact: "0.11.2"
     )
   ],
   targets: [
