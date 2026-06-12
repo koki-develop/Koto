@@ -17,13 +17,19 @@
 				<key>BundleOverwriteAction</key>
 				<string></string>
 				<key>RootRelativeBundlePath</key>
-				<string>Koto.app/Contents/Resources/llama_llama.bundle</string>
+				<string>Koto.app/Contents/Resources/AzooKeyKanaKanjiConverter_KanaKanjiConverterModuleWithDefaultDictionary.bundle</string>
 			</dict>
 			<dict>
 				<key>BundleOverwriteAction</key>
 				<string></string>
 				<key>RootRelativeBundlePath</key>
-				<string>Koto.app/Contents/Resources/AzooKeyKanakanjiConverter_KanaKanjiConverterModuleWithDefaultDictionary.bundle</string>
+				<string>Koto.app/Contents/Resources/AzooKeyKanaKanjiConverter_EfficientNGram.bundle</string>
+			</dict>
+			<dict>
+				<key>BundleOverwriteAction</key>
+				<string></string>
+				<key>RootRelativeBundlePath</key>
+				<string>Koto.app/Contents/Resources/swift-transformers_Hub.bundle</string>
 			</dict>
 		</array>
 		<key>RootRelativeBundlePath</key>
