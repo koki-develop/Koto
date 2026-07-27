@@ -53,6 +53,16 @@ extension ComposingText {
     self.deleteBackwardFromCursorPosition(count: 1)
   }
 
+  /// 変換対象のカーソルを末尾へ戻す。
+  ///
+  /// 変換範囲の指定(shift + 左右)を伴う `.selecting` から `.composing` へ戻るときに使う。
+  /// `.composing` の未確定テキストは全体が表示されるため、カーソルを途中に残したままだと
+  /// 「見えている文字列より短い範囲しか変換されない」不可視の状態になる。
+  mutating func moveCursorToEnd() {
+    _ = self.moveCursorFromCursorPosition(
+      count: self.convertTarget.count - self.convertTargetCursorPosition)
+  }
+
   func toKatakana() -> ComposingText {
     var katakana = ComposingText()
     katakana.insertAtCursorPosition(self.convertTarget.toKatakana(), inputStyle: .direct)
