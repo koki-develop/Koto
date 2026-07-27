@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/koki-develop/Koto/compare/v0.5.4...v0.6.0) (2026-07-27)
+
+
+### Features
+
+* replace IMKCandidates with a custom candidate window ([b02a8b9](https://github.com/koki-develop/Koto/commit/b02a8b916dca756ea894e6d1c88999a978e3b01e))
+
 ## [0.5.4](https://github.com/koki-develop/Koto/compare/v0.5.3...v0.5.4) (2026-06-12)
 
 
