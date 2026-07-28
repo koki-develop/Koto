@@ -25,6 +25,17 @@ let package = Package(
           package: "AzooKeyKanaKanjiConverter"
         ),
       ]
-    )
+    ),
+    .testTarget(
+      name: "KotoCoreTests",
+      dependencies: [
+        "KotoCore",
+        .product(name: "KanaKanjiConverterModule", package: "AzooKeyKanaKanjiConverter"),
+        .product(
+          name: "KanaKanjiConverterModuleWithDefaultDictionary",
+          package: "AzooKeyKanaKanjiConverter"
+        ),
+      ]
+    ),
   ]
 )

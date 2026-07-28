@@ -21,7 +21,7 @@ Requires [Task](https://taskfile.dev) CLI runner.
 | `task clean` | Remove `./build` directory |
 | `task fmt` | Format with `swift-format format --recursive --in-place .` |
 
-No test suite exists.
+Tests live in `KotoCore/Tests/` (swift-testing). Run them with `swift test` from `KotoCore/` — there is no `task` wrapper and CI does not run them.
 
 ## Project Structure
 

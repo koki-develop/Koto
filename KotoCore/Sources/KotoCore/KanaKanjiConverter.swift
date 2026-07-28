@@ -14,7 +14,7 @@ private let kotoDirectoryURL = URL.applicationSupportDirectory
 // 学習データの置き場。.cachesDirectory は OS にパージされうるため
 // Application Support 配下に置く。ディレクトリを用意できない場合のみ
 // 従来の .cachesDirectory にフォールバックする。
-private let memoryDirectoryURL: URL = {
+private let defaultMemoryDirectoryURL: URL = {
   let directoryURL = kotoDirectoryURL.appending(path: "memory", directoryHint: .isDirectory)
   do {
     try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
@@ -25,16 +25,28 @@ private let memoryDirectoryURL: URL = {
   return directoryURL
 }()
 
-private func options() -> ConvertRequestOptions {
+// azooKey 既定の特殊変換(暦・メールアドレス・Unicode など)は残したまま、
+// Koto 独自のものを足す。nil を渡すと既定のものだけが使われる。
+private let specialCandidateProviders: [any SpecialCandidateProvider] =
+  KanaKanjiConverter.defaultSpecialCandidateProviders + [NumberFormsSpecialCandidateProvider()]
+
+/// 変換オプション。
+///
+/// 置き場の 2 つは既定でユーザの実データを指す。変換は学習データを読み書きし、
+/// ユーザ辞書も読むため、テストからは必ず捨てて良いディレクトリを渡すこと。
+func options(
+  memoryDirectoryURL: URL = defaultMemoryDirectoryURL,
+  sharedContainerURL: URL = kotoDirectoryURL
+) -> ConvertRequestOptions {
   return ConvertRequestOptions(
     requireJapanesePrediction: false,
     requireEnglishPrediction: false,
     keyboardLanguage: .ja_JP,
     learningType: .inputAndOutput,
     memoryDirectoryURL: memoryDirectoryURL,
-    sharedContainerURL: kotoDirectoryURL,
+    sharedContainerURL: sharedContainerURL,
     textReplacer: .empty,
-    specialCandidateProviders: nil,
+    specialCandidateProviders: specialCandidateProviders,
     zenzaiMode: .off,
     metadata: .init()
   )

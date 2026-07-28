@@ -8,10 +8,26 @@ Local SwiftPM package containing all IME logic. Sources live in `Sources/KotoCor
 
 **Gotcha:** the `KotoCore` library product must stay automatic/static. Making it a dynamic framework breaks bundling of the converter's default dictionary resource into the app.
 
+## Tests
+
+`Tests/KotoCoreTests/` (swift-testing, `@testable import KotoCore`). Run with `swift test` from this directory. Not wired into `task` or CI, so run it by hand after touching conversion logic.
+
+**Never let a test convert with the default `options()`.** Conversion reads and writes the learning memory and reads the user dictionary, both under `~/Library/Application Support/Koto` by default — a test that uses them corrupts real learning data and turns its own assertions into a function of the developer's typing history. Pass throwaway directories: `options(memoryDirectoryURL:sharedContainerURL:)` takes both for exactly this reason.
+
 ## Orientation
 
 - The IME is a three-state machine (`InputState`): `.normal` (idle) → `.composing` (typing romaji) → `.selecting` (candidate list shown).
 - `InputController` (`@objc(KotoInputController)`, an `IMKInputController` subclass) is the logic hub. `handle(_:client:)` dispatches on `(EventType, InputState)` tuples — start there to follow any input behavior.
+
+## Injected candidates
+
+`KanaKanjiConverter.swift` passes azooKey's `defaultSpecialCandidateProviders` **plus** `NumberFormsSpecialCandidateProvider`, which offers `①` `❶` `Ⅰ` `ⅰ` for digit input. The default dictionary has no entry for full-width digits, so without it `１` converts to nothing but `１`. Passing `nil` there would silently drop the custom provider and keep only the defaults.
+
+When adding another provider, follow the same three rules:
+
+- Emit only what exists as a single Unicode scalar. Composed strings (`ⅩⅢ`) just add spelling variants.
+- Set `isLearningTarget: false`. A learned entry comes back as a *dictionary* candidate on the next conversion, which would make `①` the default result for `１`.
+- Set `composingCount: .inputCount(inputData.input.count)`. `insertSelectingCandidate()` hands it to `prefixComplete(composingCount:)`, so a wrong count leaves the composing text out of sync with what was committed.
 
 ## Candidate window
 
