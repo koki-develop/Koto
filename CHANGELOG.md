@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/koki-develop/Koto/compare/v0.7.0...v0.7.1) (2026-08-08)
+
+
+### Bug Fixes
+
+* stop the learning data save from killing the input method ([9d09eff](https://github.com/koki-develop/Koto/commit/9d09effe54afe712cb1a0bf5e5cc3faab90a3225))
+
 ## [0.7.0](https://github.com/koki-develop/Koto/compare/v0.6.0...v0.7.0) (2026-08-08)
 
 
