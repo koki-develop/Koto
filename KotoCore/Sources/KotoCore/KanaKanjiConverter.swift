@@ -14,16 +14,34 @@ private let kotoDirectoryURL = URL.applicationSupportDirectory
 
 // 学習データの置き場。.cachesDirectory は OS にパージされうるため
 // Application Support 配下に置く。ディレクトリを用意できない場合のみ
-// 従来の .cachesDirectory にフォールバックする。
+// キャッシュ配下にフォールバックする。
+//
+// フォールバック先も必ず Koto 専用のディレクトリにすること。ここは
+// `LearningMemory` が中身を消しにいく先でもあるので、共用の場所を指すと
+// 他人のファイルを消す道が開く。作成に失敗しても Koto 配下を返す
+// (書けなければ学習が働かないだけで、外には手が出ない)。
 private let defaultMemoryDirectoryURL: URL = {
   let directoryURL = kotoDirectoryURL.appending(path: "memory", directoryHint: .isDirectory)
   do {
     try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+    return directoryURL
   } catch {
     Log.lifecycle.error("failed to create learning data directory: \(error, privacy: .public)")
-    return .cachesDirectory
   }
-  return directoryURL
+
+  let fallbackURL = URL.cachesDirectory
+    .appending(path: "Koto", directoryHint: .isDirectory)
+    .appending(path: "memory", directoryHint: .isDirectory)
+  do {
+    try FileManager.default.createDirectory(at: fallbackURL, withIntermediateDirectories: true)
+  } catch {
+    // ここまで来ると学習は一切残らない。azooKey 側の失敗はリリースビルドでは
+    // 消える `debug()` にしか出ないので、痕跡はここでしか残せない。
+    Log.lifecycle.error(
+      "failed to create the fallback learning data directory; learning will not persist: \(error, privacy: .public)"
+    )
+  }
+  return fallbackURL
 }()
 
 // azooKey 既定の特殊変換(暦・メールアドレス・Unicode など)は残したまま、
@@ -88,6 +106,9 @@ final class Converter {
   /// 最初の未保存更新から `maxSaveDelay` 後の時刻。保存すると `nil` に戻る。
   private var saveDeadline: ContinuousClock.Instant?
 
+  /// 一度でも変換したか。復元マージの後始末を一度だけ行うために見る。
+  private var hasConverted = false
+
   /// - Parameters:
   ///   - convertOptions: 変換オプション。既定はユーザの実データを指すため、
   ///     テストからは必ず捨てて良いディレクトリを向けたものを渡すこと。
@@ -101,6 +122,11 @@ final class Converter {
     self.convertOptions = convertOptions
     self.saveDelay = saveDelay
     self.maxSaveDelay = maxSaveDelay
+
+    // 保存だけがマージの入口ではない。前回の書き込みが中断されていると、azooKey は
+    // プロセス最初の変換で復元のマージを暗黙に走らせる。そちらは `save()` を通らない
+    // ので、変換を始めさせる前にここでも落としておく。
+    LearningMemory.removeStaleShards(in: convertOptions.memoryDirectoryURL)
   }
 
   /// 保存を予約しているか。
@@ -114,7 +140,18 @@ final class Converter {
   }
 
   func convert(_ composingText: ComposingText) -> ConversionResult {
-    return self.converter.requestCandidates(composingText, options: self.convertOptions)
+    let result = self.converter.requestCandidates(composingText, options: self.convertOptions)
+
+    // 中断からの復元マージは、このプロセス最初の変換の中で azooKey が勝手に走らせる。
+    // それも世代を書き直すので、自前の取り残しを置いていく。保存経路と同じように、
+    // 走り終わったところで拾っておく。判定は一度きりで済む(`updateConfig` は
+    // 設定が変わったときだけ走り、Koto は同じオプションを渡し続けるため)。
+    if !self.hasConverted {
+      self.hasConverted = true
+      LearningMemory.removeStaleShards(in: self.convertOptions.memoryDirectoryURL)
+    }
+
+    return result
   }
 
   func stopComposition() {
@@ -182,6 +219,17 @@ final class Converter {
   private func save() {
     self.pendingSave = nil
     self.saveDeadline = nil
+
+    // azooKey は世代が縮んだときに余ったシャードを消さない。取り残しが揃うと
+    // 次のマージがそれを読みにいってプロセスごと落ちる。理由は `LearningMemory` に書いてある。
+    //
+    // マージの前後の両方で落とす。前は今から走るマージを守るため、後はこのマージ自身が
+    // 作った取り残しを持ち越さないため。「置き場は落ち着いているときは常に整合している」
+    // という形にしておけば、マージの入口が増えたときに穴が開かない
+    // (実際、保存だけだと復元のマージを取りこぼしていた)。
+    let memoryDirectoryURL = self.convertOptions.memoryDirectoryURL
+    LearningMemory.removeStaleShards(in: memoryDirectoryURL)
     self.converter.commitUpdateLearningData()
+    LearningMemory.removeStaleShards(in: memoryDirectoryURL)
   }
 }

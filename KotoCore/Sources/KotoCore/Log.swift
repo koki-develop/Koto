@@ -22,4 +22,7 @@ enum Log {
 
   /// クライアント(入力先アプリ)への同期呼び出し。
   static let client = Logger(subsystem: subsystem, category: "client")
+
+  /// 学習メモリの置き場に対する後始末。
+  static let memory = Logger(subsystem: subsystem, category: "memory")
 }

@@ -49,6 +49,28 @@ Two rules that follow from the same invariant:
 
 `KanaKanjiConverter` is a non-`Sendable` `final class`, so moving the save to a background queue is not an option — do not try.
 
+### Koto owns the directory's consistency
+
+Koto chooses where the learning memory lives, so **Koto is also responsible for the state of what is in it.** `LearningMemory.removeStaleShards(in:)` enforces that, and `Converter` is the only thing that calls it.
+
+**azooKey merges from two places, and both have to be covered.** The obvious one is the save. The other is recovery: if a previous write was cut short, a `.pause` file is left behind and azooKey merges implicitly on the process's *first conversion*, nowhere near `save()`. So the cleanup runs in `Converter.init` as well — a crash there kills the IME before the user has typed anything.
+
+Rather than rely on that list staying complete, the cleanup aims at a stronger invariant: **the directory is consistent whenever a merge is not actually running.** Every merge is a generation rewrite, so every merge leaves the next batch of leftovers behind — which means each one needs a cleanup on its far side, not just in front of it. `init` establishes the invariant for whatever a previous process left; `convert()` re-establishes it after the first conversion, which is where the recovery merge hides; `save()` re-establishes it after `commitUpdateLearningData()`. Enumerating merge entry points is the part that was already got wrong once; do not go back to depending on it.
+
+**Which metadata counts as current depends on `.pause`.** Without it, `memory.memorymetadata` is the truth. With it, the truth is `memory.memorymetadata.2` — the real file may still describe the pre-interruption generation, and counting from it would delete the pending generation's tail shards, which are the only copies recovery has. Either way both `memoryN.loudstxt3` and its `.2` get dropped, because recovery restores `.2` over the real names without removing the extras.
+
+azooKey splits the memory into one metadata file plus `memoryN.loudstxt3` shards, and rewrites only as many shards as the current generation needs — **it never deletes the ones left over when the memory shrinks.** That is not merely wasted disk: `LongTermLearningMemory.merge` sizes its read loop as `entryCount / entriesPerShard + 1`, so once the entry count lands on an exact multiple of the shard size it reads one shard past the generation. With a leftover file sitting there it walks off the end of the metadata and **the process dies on a `Data` bounds trap** (azooKey 0.11.2 has no guard on that read; `main` added one but has not shipped). The merge dies before writing, so the entry count never changes and every later save dies the same way.
+
+Read the trap as an IME-wide failure, not a learning failure. When this process dies, every app holding an IMK session is left with a dead connection and gets no Japanese input until *it* restarts — with no visible sign that Koto was involved.
+
+`LearningMemory` reads the entry count out of the metadata header, which is not a public format. Most of `LearningMemoryTests` cannot catch a format change — it builds the header the same way the code reads it, so the two agree no matter what azooKey does. `agreesWithLayoutWrittenByAzooKey` is the one that can: it makes azooKey write a real learning memory and checks our count against the shards actually on disk. **Keep that test working across dependency bumps** — it is the only thing standing between a format change and Koto deleting the wrong files.
+
+The shard *size* is a second borrowed constant, and a nastier one: `DictionaryBuilder.entriesPerShard` describes the azooKey linked into this build, while the directory on disk was written by whatever build ran last. Bump the dependency across a `shardShift` change and counting with the new width would delete still-live shards — in `Converter.init`, before the user types anything. So the width is checked against the data instead of assumed: the leading shard's own header says how many entries it holds, and that must equal `min(entryCount, entriesPerShard)`. When it doesn't, the directory was written by a different layout and nothing is touched.
+
+When in doubt, delete nothing. `LearningMemory.Generation` says which of three things the directory is, and `.unknown` means "cannot tell", never "zero shards" — zero would read as "every shard is stale" and wipe the place. Failing to delete only risks the crash this code exists to prevent; deleting too much loses learning the user cannot get back.
+
+The one case that deletes everything is `.orphanedShards`: the metadata file is gone while numbered shards remain. Nothing can read those shards, and azooKey substitutes four zero bytes for the missing metadata and then walks off the end of them — the same process death, on every save, forever. It is reachable because `LongTermLearningMemory.reset` deletes in arbitrary order and abandons the loop on the first throw, so a failed "reset learning data" can leave exactly this. Clearing the shards finishes the interrupted reset and the next merge rebuilds from empty.
+
 Flushing at exit is the app target's job; see `Koto/CLAUDE.md`.
 
 ## Logging
