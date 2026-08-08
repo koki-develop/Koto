@@ -7,17 +7,6 @@ import Testing
 
 private let provider = NumberFormsSpecialCandidateProvider()
 
-/// 製品コードと同じ変換オプション。ただし学習データとユーザ辞書の置き場は
-/// 実行ごとの捨てディレクトリに向ける。既定のままだと変換が
-/// `~/Library/Application Support/Koto` を読み書きしてしまい、
-/// 実際の学習内容でテスト結果が変わるうえ、利用者の学習データを壊す。
-private func testOptions() -> ConvertRequestOptions {
-  let directoryURL = URL(fileURLWithPath: NSTemporaryDirectory())
-    .appending(path: "koto-tests-\(UUID().uuidString)", directoryHint: .isDirectory)
-  try? FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
-  return options(memoryDirectoryURL: directoryURL, sharedContainerURL: directoryURL)
-}
-
 private func composingText(_ text: String) -> ComposingText {
   var composingText = ComposingText()
   for character in text {
@@ -31,7 +20,7 @@ private func texts(_ input: String) -> [String] {
   return provider.provideCandidates(
     converter: converter,
     inputData: composingText(input),
-    options: testOptions()
+    options: throwawayOptions()
   ).map(\.text)
 }
 
@@ -80,7 +69,7 @@ func halfWidthInput() {
   let candidates = provider.provideCandidates(
     converter: KanaKanjiConverter(),
     inputData: composingText,
-    options: testOptions()
+    options: throwawayOptions()
   )
   #expect(candidates.map(\.text) == ["①", "❶", "Ⅰ", "ⅰ"])
 }
@@ -91,7 +80,7 @@ func candidateShape() {
   let candidates = provider.provideCandidates(
     converter: KanaKanjiConverter(),
     inputData: input,
-    options: testOptions()
+    options: throwawayOptions()
   )
   #expect(!candidates.isEmpty)
   for candidate in candidates {
@@ -106,7 +95,7 @@ func endToEnd() {
   let converter = KanaKanjiConverter()
   let results =
     converter
-    .requestCandidates(composingText("1"), options: testOptions())
+    .requestCandidates(composingText("1"), options: throwawayOptions())
     .mainResults
     .map(\.text)
 

@@ -30,7 +30,7 @@ Two targets, each with its own `CLAUDE.md` covering the details:
 - **`Koto/`** — the app target (`@main` entry point, `Info.plist`, entitlements, resources). See `Koto/CLAUDE.md`.
 - **`KotoCore/`** — local SwiftPM package holding all IME logic. The Xcode project references it as a local package, and the external `AzooKeyKanaKanjiConverter` dependency is declared in `KotoCore/Package.swift` (pinned by revision) rather than in the Xcode project. See `KotoCore/CLAUDE.md`.
 
-Dependency updates and IME behavior changes happen in `KotoCore`; the app target only bootstraps the `IMKServer`.
+Dependency updates and IME behavior changes happen in `KotoCore`; the app target only bootstraps the `IMKServer` and forwards process lifecycle events into `KotoCore`.
 
 ## CI/CD
 
