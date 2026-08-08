@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.7.0](https://github.com/koki-develop/Koto/compare/v0.6.0...v0.7.0) (2026-08-08)
+
+
+### Features
+
+* offer circled and roman numeral candidates for digit input ([b37ba44](https://github.com/koki-develop/Koto/commit/b37ba4493414cfceee6681e00964a9914918af28))
+
+
+### Bug Fixes
+
+* stop the input method stalling when switching apps ([873bbb8](https://github.com/koki-develop/Koto/commit/873bbb8f1f56f6012390255f9f4aa414a62b0017))
+
 ## [0.6.0](https://github.com/koki-develop/Koto/compare/v0.5.4...v0.6.0) (2026-07-27)
 
 
