@@ -12,6 +12,7 @@ final class FakeTextInput: NSObject, IMKTextInput {
     case insertText(String)
     case setMarkedText(String)
     case cursorRect
+    case bundleIdentifier
   }
 
   private(set) var calls: [Call] = []
@@ -90,7 +91,10 @@ final class FakeTextInput: NSObject, IMKTextInput {
     return true
   }
 
+  /// Koto はこれを呼ばない。呼べば 1 往復ぶんフォーカス遷移や打鍵が伸びるため、
+  /// 診断のためだけに足された呼び出しがテストに現れるよう記録しておく。
   func bundleIdentifier() -> String! {
+    self.record(.bundleIdentifier)
     return "me.koki.inputmethod.Koto.tests"
   }
 

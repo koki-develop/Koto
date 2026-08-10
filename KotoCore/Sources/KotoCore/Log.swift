@@ -23,6 +23,14 @@ enum Log {
   /// クライアント(入力先アプリ)への同期呼び出し。
   static let client = Logger(subsystem: subsystem, category: "client")
 
+  /// 処理せずアプリへ素通ししたキーイベント。
+  ///
+  /// 素通しは正常な動作でもあるので、ふだんは `info` にしか出さない。
+  /// 後から追えるようにするには永続化が要る:
+  ///
+  ///     sudo log config --subsystem me.koki.inputmethod.Koto --mode "level:info,persist:info"
+  static let event = Logger(subsystem: subsystem, category: "event")
+
   /// 学習メモリの置き場に対する後始末。
   static let memory = Logger(subsystem: subsystem, category: "memory")
 }

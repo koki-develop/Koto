@@ -60,12 +60,7 @@ struct Client {
   }
 
   private func measure(_ name: String, _ body: () -> Void) {
-    let start = DispatchTime.now().uptimeNanoseconds
-    body()
-    let elapsed = Double(DispatchTime.now().uptimeNanoseconds - start) / 1_000_000
-    if elapsed >= Self.slowCallThreshold {
-      Log.client.warning(
-        "slow client call: \(name, privacy: .public) took \(elapsed, privacy: .public) ms")
-    }
+    measureElapsed(
+      "client call \(name)", threshold: Self.slowCallThreshold, log: Log.client, body)
   }
 }

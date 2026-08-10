@@ -26,7 +26,14 @@ tasks:
   install:
     deps: [build]
     cmds:
-      - cp -R ./build/{{.CONFIGURATION}}/Koto.app ~/Library/Input\ Methods
+      # cp -R は既存のバンドルへ「混ぜる」ので、前のビルドの置き土産
+      # (Debug の Koto.debug.dylib など)が残り、_CodeSignature と中身が食い違う。
+      # かといって先に消すと、コピーに失敗したときに入力メソッドが無い状態で取り残される。
+      # 隣に置き切ってから差し替える。
+      - rm -rf ~/Library/Input\ Methods/Koto.app.new
+      - cp -R ./build/{{.CONFIGURATION}}/Koto.app ~/Library/Input\ Methods/Koto.app.new
+      - rm -rf ~/Library/Input\ Methods/Koto.app
+      - mv ~/Library/Input\ Methods/Koto.app.new ~/Library/Input\ Methods/Koto.app
 
   install:release:
     deps:

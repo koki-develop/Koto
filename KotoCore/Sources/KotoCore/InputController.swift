@@ -43,13 +43,16 @@ public class KotoInputController: IMKInputController {
   @MainActor
   lazy var converter: Converter = Self.sharedConverter
 
-  /// 変換器を用意する。プロセス起動時にアプリ側から呼ぶ。
+  /// 共有するものを先に作っておく。プロセス起動時にアプリ側から呼ぶ。
   ///
-  /// 放っておくと最初の `deactivateServer` — つまりフォーカス遷移の真っ最中 — に
-  /// 辞書を読み込むことになるため、誰も待っていない起動時に済ませてしまう。
+  /// どちらも `static let` の遅延生成なので、放っておくと最初に触った場所 —
+  /// つまりフォーカス遷移の真っ最中 — で組み立てが走る。変換器なら辞書の読み込み、
+  /// 候補ウィンドウなら `NSPanel` と Auto Layout の構築。誰も待っていない起動時に
+  /// 済ませてしまう。
   @MainActor
   public static func preload() {
     _ = Self.sharedConverter
+    _ = Self.sharedCandidateWindow
   }
 
   /// 保存待ちの学習データを書き出す。プロセス終了時にアプリ側から呼ぶ。
@@ -67,6 +70,10 @@ public class KotoInputController: IMKInputController {
   var composingText: ComposingText = ComposingText()
   /// 変換候補の唯一の情報源。候補ウィンドウはこれを描画するだけで状態を持たない。
   var candidateList = CandidateList()
+
+  /// 実を結ばなかった打鍵の記録係。
+  /// 差し替えられるようにしてあるのはテストのため(修飾キーの押下状態を固定するのに使う)。
+  var unhandledKeyMonitor = UnhandledKeyMonitor()
 
   public override init!(server: IMKServer!, delegate: Any!, client inputClient: Any!) {
     Log.lifecycle.info("init")
@@ -99,31 +106,81 @@ public class KotoInputController: IMKInputController {
       self.resetState()
       return false
     }
-    guard let eventType = self.getEventType(event) else {
+    switch self.interpret(event) {
+    case .unhandled(let reason):
+      self.unhandledKeyMonitor.record(reason, event: event)
       return false
+
+    case .event(let eventType):
+      // キーを処理する前に、候補ウィンドウの表示を自分の状態に一致させる。
+      // ここを通すことで、以降の分岐は「.selecting なら候補が画面に出ている」
+      // という前提を置ける。特に数字キーによる候補選択は画面上の行番号に依存する
+      // ため、見えていないリストから確定してしまう経路をここで塞いでいる。
+      self.syncCandidateWindow(client)
+
+      switch self.dispatch(eventType, client: client) {
+      case .handled:
+        // 処理できたということは、素通しの連続はここで途切れた。
+        self.unhandledKeyMonitor.endRun()
+        return true
+
+      case .handledAndForwarded:
+        // アプリにも渡すが、Koto は処理している。素通しとして数えてはいけない。
+        self.unhandledKeyMonitor.endRun()
+        return false
+
+      case .noAction:
+        // 解釈はできたが、いまの状態ですることが無かった。これはアプリのもの。
+        self.unhandledKeyMonitor.record(.noActionForState, event: event)
+        return false
+
+      case .swallowed:
+        self.unhandledKeyMonitor.record(.ignoredCombination, event: event)
+        return true
+      }
     }
+  }
 
-    // キーを処理する前に、候補ウィンドウの表示を自分の状態に一致させる。
-    // ここを通すことで、以降の分岐は「.selecting なら候補が画面に出ている」
-    // という前提を置ける。特に数字キーによる候補選択は画面上の行番号に依存する
-    // ため、見えていないリストから確定してしまう経路をここで塞いでいる。
-    self.syncCandidateWindow(client)
+  /// 解釈できたキーを、いまの状態に応じて実行した結果。
+  ///
+  /// 「Koto が処理したか」と「アプリにも渡すか」は別の問い。1 つの `Bool` にまとめると、
+  /// 確定を書き込んだうえでアプリにも渡す枝が「何もしなかった」と誤って記録される。
+  private enum DispatchOutcome {
+    /// Koto が処理した。アプリには渡さない。
+    case handled
+    /// Koto が処理したうえで、アプリにも渡す。
+    case handledAndForwarded
+    /// この状態ですることが無かった。アプリのものになる。
+    case noAction
+    /// Koto が意図的に握り潰した。アプリにも渡さない。
+    ///
+    /// 利用者から見れば「打ったのに何も起きない」なので、素通しと同じく記録の対象。
+    /// ここを `.handled` に混ぜると、変換中に修飾キーが張り付いた場合に、キーだけが
+    /// 消えて記録には何も残らない — もっとも見つけにくい形になる。
+    case swallowed
+  }
 
+  /// 解釈できたキーを、いまの状態に応じて実行する。
+  @MainActor
+  private func dispatch(_ eventType: EventType, client: Client) -> DispatchOutcome {
     switch (eventType, self.state) {
     case (.input(let text), _):
-      return self.handleInputText(text, client: client)
+      self.handleInputText(text, client: client)
+      return .handled
 
     case (.number(let number), .selecting):
       guard let index = self.candidateList.index(forDisplayedNumber: number) else {
         // 表示されていない番号(0 や候補数に満たない番号)は通常の文字入力に回す。
-        return self.handleInputText(String(number), client: client)
+        self.handleInputText(String(number), client: client)
+        return .handled
       }
       self.candidateList.select(index)
       self.commitSelectedCandidate(client)
-      return true
+      return .handled
 
     case (.number(let number), _):
-      return self.handleInputText(String(number), client: client)
+      self.handleInputText(String(number), client: client)
+      return .handled
 
     case (.backspace, .composing):
       self.composingText.removeLast()
@@ -132,80 +189,83 @@ public class KotoInputController: IMKInputController {
       } else {
         self.setComposingMarkedText(client)
       }
-      return true
+      return .handled
 
     case (.backspace, .selecting):
+      // 未確定のものを確定したうえで、削除そのものはアプリに任せる。
       self.commitPendingText(client)
-      return false
+      return .handledAndForwarded
 
     case (.space, .normal):
       client.insertText("　")
-      return true
+      return .handled
 
     case (.space, .composing), (.down, .composing):
       self.startSelecting(client)
-      return true
+      return .handled
 
     case (.space, .selecting), (.down, .selecting):
       self.candidateList.selectNext()
       self.refreshSelection(client)
-      return true
+      return .handled
 
     case (.up, .selecting):
       self.candidateList.selectPrevious()
       self.refreshSelection(client)
-      return true
+      return .handled
 
     case (.enter, .composing):
       self.commitPendingText(client)
-      return true
+      return .handled
 
     case (.enter, .selecting):
       self.commitSelectedCandidate(client)
-      return true
+      return .handled
 
     case (.esc, .composing):
       self.clear(client)
-      return true
+      return .handled
 
     case (.esc, .selecting):
       self.stopSelecting()
       self.setComposingMarkedText(client)
-      return true
+      return .handled
 
     case (.ctrlK, .composing):
       self.composingText = self.composingText.toKatakana()
       self.setComposingMarkedText(client)
-      return true
+      return .handled
 
     case (.ctrlK, .selecting):
       self.stopSelecting()
       self.composingText = self.composingText.toKatakana()
       self.setComposingMarkedText(client)
-      return true
+      return .handled
 
     case (.shiftLeft, .selecting):
       if self.composingText.convertTargetCursorPosition > 1 {
         _ = self.composingText.moveCursorFromCursorPosition(count: -1)
         self.refreshCandidates(client)
       }
-      return true
+      return .handled
 
     case (.shiftRight, .selecting):
       if !self.composingText.isAtEndIndex {
         _ = self.composingText.moveCursorFromCursorPosition(count: 1)
         self.refreshCandidates(client)
       }
-      return true
+      return .handled
 
     case (.shiftLeft, .composing), (.shiftRight, .composing):
-      return true
+      return .handled
 
     case (.ignore, .composing), (.ignore, .selecting):
-      return true
+      // 変換中に未割り当ての修飾キー付きが飛んできた。アプリに渡すと変換が壊れるので
+      // 握り潰すが、握り潰したことは記録に残す。
+      return .swallowed
 
     default:
-      return false
+      return .noAction
     }
   }
 
@@ -220,7 +280,9 @@ public class KotoInputController: IMKInputController {
   public override func activateServer(_ sender: Any!) {
     Log.lifecycle.info("activateServer")
 
-    super.activateServer(sender)
+    self.measureCallback("super.activateServer") {
+      super.activateServer(sender)
+    }
     self.candidateWindow.takeOver(by: self)
   }
 
@@ -241,6 +303,9 @@ public class KotoInputController: IMKInputController {
     Log.lifecycle.info("commitComposition")
 
     self.candidateWindow.hide(requestedBy: self)
+    // 素通しが続いたままこの入力セッションが終わることがある。ここで閉じないと、
+    // 発生の終わりが記録に残らず、規模も長さも読めなくなる。
+    self.unhandledKeyMonitor.endRun()
 
     // 引数の client が使えないのは想定外(IMK のヘッダは sender が必ず IMKTextInput に
     // 適合すると書いている)だが、そのときに未確定文字列を黙って捨てるのは避ける。
@@ -260,15 +325,36 @@ public class KotoInputController: IMKInputController {
     Log.lifecycle.info("deactivateServer")
 
     self.resetState()
-    super.deactivateServer(sender)
+    // 素通しが続いたままセッションが終わることがある。打っても入らないので別のアプリへ
+    // 移る、が利用者の自然な反応で、そこで閉じないと発生の終わりが記録に残らない。
+    self.unhandledKeyMonitor.endRun()
+    self.measureCallback("super.deactivateServer") {
+      super.deactivateServer(sender)
+    }
   }
+
+  /// IMK のコールバック本体の所要時間を測る。
+  ///
+  /// `super.activateServer` / `super.deactivateServer` の中で、IMK はクライアントへ
+  /// `bundleIdentifier` を同期で問い合わせる(unified log の
+  /// `(InputMethodKit) Get bundle identifier` が activate/deactivate と 1 対 1 で出る)。
+  /// つまりフォーカス遷移の最中のクライアント往復は、Koto が何もしなくても 1 回入る。
+  /// Koto からは避けようがないので、せめて遅れたことは残す。
+  @MainActor
+  private func measureCallback(_ name: String, _ body: () -> Void) {
+    measureElapsed(
+      "callback \(name)", threshold: Self.slowCallbackThreshold, log: Log.lifecycle, body)
+  }
+
+  /// フォーカス遷移が目に見えて遅れているとみなす所要時間(ミリ秒)。
+  private static let slowCallbackThreshold: Double = 50
 
   // MARK: - 状態遷移
 
   /// 文字入力を現在の状態に応じて処理する。
   /// 候補選択中なら選択中の候補と残りの未確定文字列を確定してから入力し直す。
   @MainActor
-  private func handleInputText(_ text: String, client: Client) -> Bool {
+  private func handleInputText(_ text: String, client: Client) {
     if self.state == .selecting {
       self.commitPendingText(client)
     }
@@ -278,7 +364,6 @@ public class KotoInputController: IMKInputController {
 
     self.composingText.append(text, inputStyle: .roman2kana)
     self.setComposingMarkedText(client)
-    return true
   }
 
   /// 変換を開始して候補ウィンドウを開く。
@@ -438,6 +523,16 @@ public class KotoInputController: IMKInputController {
     self.candidateWindow.hide(requestedBy: self)
 
     self.state = .normal
+    // 変換器はプロセス全体で共有しているが、ここは無条件に畳む。
+    //
+    // IMK は deactivateServer と activateServer の到着順を保証しないので、「自分が
+    // アクティブなときだけ畳む」形も考えられる。だがそれは割に合わない。遅れて届いた
+    // deactivate が消しうるのは、直前に activate されたばかりのセッションの変換状態 —
+    // つまり中身の無いもの。一方で畳まないほうは、`takeSelectedCandidate` が
+    // `setCompletedData` と `updateLearningData` で共有の変換器に書き込んだ直後の
+    // `commitComposition` にも効いてしまい、前のアプリの文脈が次のアプリへ持ち越される
+    // (学習には存在しない連接が書かれ、入力が前の入力の末尾と重なると変換結果も変わる)。
+    // 起きない事故を防ぐために、毎回通る経路を壊すことになる。
     self.converter.stopComposition()
     self.composingText.stopComposition()
     self.candidateList.reset()
@@ -486,64 +581,69 @@ public class KotoInputController: IMKInputController {
 
   // MARK: - キーイベントの解釈
 
-  private func getEventType(_ event: NSEvent) -> EventType? {
+  /// キーイベントの解釈結果。
+  private enum KeyInterpretation {
+    /// Koto の操作として読めた。
+    case event(EventType)
+    /// 読めなかった。そのキーはアプリのものになる。
+    case unhandled(UnhandledKeyReason)
+  }
+
+  /// キーイベントを Koto の操作へ翻訳する。
+  ///
+  /// 読めなかったときに理由を返すのは、実を結ばない打鍵が「正常な動作」と
+  /// 「Koto を選んでいるのにローマ字がそのまま入る不具合」の両方の形だから。
+  /// どちらなのかの判断は `UnhandledKeyMonitor` が受け持つ。
+  private func interpret(_ event: NSEvent) -> KeyInterpretation {
     if event.type != .keyDown {
-      return nil
+      return .unhandled(.notKeyDown)
     }
 
     if event.modifierFlags.contains(.command) {
-      return nil
+      return .unhandled(.commandModifier)
     }
 
     // Control key
     if event.modifierFlags.contains(.control) {
       switch event.keyCode {
       case Keycodes.h:
-        return .backspace
+        return .event(.backspace)
       case Keycodes.p:
-        return .up
+        return .event(.up)
       case Keycodes.k:
-        return .ctrlK
+        return .event(.ctrlK)
       case Keycodes.n:
-        return .down
+        return .event(.down)
       default:
-        return .ignore
+        return .event(.ignore)
       }
     }
 
     switch event.keyCode {
     case Keycodes.yen:
-      return getYenKeyEventType(event)
+      return .event(getYenKeyEventType(event))
     case Keycodes.enter:
-      return .enter
+      return .event(.enter)
     case Keycodes.space:
-      return .space
+      return .event(.space)
     case Keycodes.backspace:
-      return .backspace
+      return .event(.backspace)
     case Keycodes.escape:
-      return .esc
+      return .event(.esc)
     case Keycodes.leftArrow:
-      if event.modifierFlags.contains(.shift) {
-        return .shiftLeft
-      } else {
-        return .ignore
-      }
+      return .event(event.modifierFlags.contains(.shift) ? .shiftLeft : .ignore)
     case Keycodes.rightArrow:
-      if event.modifierFlags.contains(.shift) {
-        return .shiftRight
-      } else {
-        return .ignore
-      }
+      return .event(event.modifierFlags.contains(.shift) ? .shiftRight : .ignore)
     case Keycodes.downArrow:
-      return .down
+      return .event(.down)
     case Keycodes.upArrow:
-      return .up
+      return .event(.up)
     default:
       break
     }
 
     guard let text = event.characters else {
-      return nil
+      return .unhandled(.noCharacters)
     }
 
     // キーコードではなく入力文字から判定することで、キーボードレイアウトに依存しない。
@@ -551,14 +651,14 @@ public class KotoInputController: IMKInputController {
     // 文字入力として扱う。(矢印キーにも .numericPad が立つが、上の keyCode 分岐で
     // 先に処理されるためここには来ない)
     if !event.modifierFlags.contains(.numericPad), let number = asciiDigit(text) {
-      return .number(number)
+      return .event(.number(number))
     }
 
     if isPrintable(text) {
-      return .input(text)
+      return .event(.input(text))
     }
 
-    return nil
+    return .unhandled(.notPrintable)
   }
 
   private func getYenKeyEventType(_ event: NSEvent) -> EventType {

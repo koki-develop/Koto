@@ -101,10 +101,11 @@ final class Converter {
   /// 最初の未保存更新からこれを過ぎたら、確定が続いていても保存する。
   private let maxSaveDelay: Duration
 
-  /// 保存待ちのタスク。`nil` でないことが「未保存の学習更新がある」印を兼ねる。
-  private var pendingSave: Task<Void, Never>?
+  /// 保存待ちのタスク。抱えていることが「未保存の学習更新がある」印を兼ねる。
+  private var pendingSave = ExclusiveTask()
   /// 最初の未保存更新から `maxSaveDelay` 後の時刻。保存すると `nil` に戻る。
-  private var saveDeadline: ContinuousClock.Instant?
+  /// 読めるようにしてあるのはテストのため。書き換えるのはこのファイルだけ。
+  private(set) var saveDeadline: ContinuousClock.Instant?
 
   /// 一度でも変換したか。復元マージの後始末を一度だけ行うために見る。
   private var hasConverted = false
@@ -136,7 +137,7 @@ final class Converter {
   /// 握り潰す(失敗時は書き込み前の状態が保たれ、次の保存に持ち越される)ため、
   /// 保存が本当に成功したかはこちらからは分からない。
   var hasUnsavedLearningData: Bool {
-    return self.pendingSave != nil
+    return self.pendingSave.isScheduled
   }
 
   func convert(_ composingText: ComposingText) -> ConversionResult {
@@ -178,16 +179,15 @@ final class Converter {
 
   /// 保存待ちの学習データがあれば、予約を待たずに書き出す。プロセス終了時に呼ぶ。
   func flushLearningData() {
-    guard let pendingSave = self.pendingSave else {
+    guard self.pendingSave.isScheduled else {
       return
     }
-    pendingSave.cancel()
+    self.pendingSave.cancel()
     self.save()
   }
 
   func resetLearningData() {
-    self.pendingSave?.cancel()
-    self.pendingSave = nil
+    self.pendingSave.cancel()
     self.saveDeadline = nil
 
     // 一度も変換していないと resetMemory() は memoryURL が nil のまま無音で
@@ -199,25 +199,51 @@ final class Converter {
     self.converter.resetMemory()
   }
 
-  private func scheduleSave() {
-    let now = ContinuousClock.now
-    // 締切は最初の未保存更新のときに決めて、以降の更新では延ばさない。
-    let deadline = self.saveDeadline ?? now.advanced(by: self.maxSaveDelay)
-    self.saveDeadline = deadline
-    let wakeUp = min(now.advanced(by: self.saveDelay), deadline)
+  /// 次に保存を試みる時刻と、その回の締切を決める。
+  ///
+  /// 2 つの待ち時間の掛け合わせは実時間に依存しない計算なので、待たずに検査できるよう
+  /// 切り出してある。実時間を絡めたテストは、並列に走る他のテストがメインスレッドを
+  /// 握っているだけで揺れる。揺れを吸収しようと上限を伸ばすと、今度は守りたい回帰まで
+  /// 通してしまう。方針そのものは、その揺れに関係なく固定できる。
+  ///
+  /// - Parameters:
+  ///   - now: いまの時刻。
+  ///   - deadline: すでに決まっている締切。最初の未保存更新なら `nil`。
+  ///   - saveDelay: 最後の学習更新から保存するまでの待ち時間。
+  ///   - maxSaveDelay: 最初の未保存更新から保存を先延ばしにできる上限。
+  nonisolated static func saveSchedule(
+    now: ContinuousClock.Instant,
+    deadline: ContinuousClock.Instant?,
+    saveDelay: Duration,
+    maxSaveDelay: Duration
+  ) -> (wakeUp: ContinuousClock.Instant, deadline: ContinuousClock.Instant) {
+    // 締切は最初の未保存更新のときに決めて、以降の更新では延ばさない。ここで `now` から
+    // 取り直すと、確定が途切れないかぎり保存が来なくなり、上限の意味が無くなる。
+    let deadline = deadline ?? now.advanced(by: maxSaveDelay)
+    return (min(now.advanced(by: saveDelay), deadline), deadline)
+  }
 
-    self.pendingSave?.cancel()
-    self.pendingSave = Task { [weak self] in
-      try? await Task.sleep(until: wakeUp, clock: .continuous)
-      guard !Task.isCancelled else {
-        return
-      }
-      self?.save()
-    }
+  private func scheduleSave() {
+    let schedule = Self.saveSchedule(
+      now: ContinuousClock.now,
+      deadline: self.saveDeadline,
+      saveDelay: self.saveDelay,
+      maxSaveDelay: self.maxSaveDelay
+    )
+    self.saveDeadline = schedule.deadline
+
+    self.pendingSave.replace(
+      with: Task { [weak self] in
+        try? await Task.sleep(until: schedule.wakeUp, clock: .continuous)
+        guard !Task.isCancelled else {
+          return
+        }
+        self?.save()
+      })
   }
 
   private func save() {
-    self.pendingSave = nil
+    self.pendingSave.clear()
     self.saveDeadline = nil
 
     // azooKey は世代が縮んだときに余ったシャードを消さない。取り残しが揃うと

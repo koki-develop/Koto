@@ -14,53 +14,6 @@ import Testing
 /// - クライアントを叩く回数が 1 回を超えないこと
 /// - 叩く時点で、候補ウィンドウと内部状態の後始末が済んでいること
 
-@MainActor
-private func makeController() -> KotoInputController {
-  let controller = KotoInputController(server: nil, delegate: nil, client: nil)!
-  // 既定の共有 Converter はユーザの実データを読み書きするため必ず差し替える。
-  // 保存の待ち時間はテスト中に発火しない長さにしておく。
-  controller.converter = Converter(
-    convertOptions: throwawayOptions(), saveDelay: .seconds(600), maxSaveDelay: .seconds(600))
-  return controller
-}
-
-private func makeCandidate(_ text: String, surfaceCount: Int) -> Candidate {
-  return Candidate(
-    text: text, value: 0, composingCount: .surfaceCount(surfaceCount), lastMid: 0, data: [])
-}
-
-/// 候補を選んでいる状態(`.selecting`)のコントローラを組み立てる。
-///
-/// 候補ウィンドウも実際に開いておく。開いていないと `handle` の入口の
-/// `syncCandidateWindow` がカーソル位置を取り直しにいくため、
-/// 実際の `.selecting` とはクライアント呼び出しの回数が変わってしまう。
-@MainActor
-private func makeSelectingController(
-  composing: String, candidateText: String, surfaceCount: Int
-) -> KotoInputController {
-  let controller = makeController()
-  controller.composingText.append(composing, inputStyle: .direct)
-  controller.candidateList.replace(with: [makeCandidate(candidateText, surfaceCount: surfaceCount)])
-  controller.state = .selecting
-  controller.candidateWindow.show(controller.candidateList, at: .zero, delegate: controller)
-  return controller
-}
-
-private func makeKeyEvent(characters: String, keyCode: UInt16) -> NSEvent {
-  return NSEvent.keyEvent(
-    with: .keyDown,
-    location: .zero,
-    modifierFlags: [],
-    timestamp: 0,
-    windowNumber: 0,
-    context: nil,
-    characters: characters,
-    charactersIgnoringModifiers: characters,
-    isARepeat: false,
-    keyCode: keyCode
-  )!
-}
-
 @Test("候補選択中の commitComposition は候補と残りをまとめて 1 回で送る")
 @MainActor
 func commitCompositionIssuesSingleCall() {
