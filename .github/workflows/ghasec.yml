@@ -1,0 +1,29 @@
+name: ghasec
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  ghasec:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+      - name: Run ghasec
+        uses: koki-develop/ghasec-action@2810775d2a300cb3fd9583c36c05b5ee3310c5b8 # v1.1.1
+        with:
+          github-token: ${{ github.token }}
+          online: true
