@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.2](https://github.com/koki-develop/Koto/compare/v0.7.1...v0.7.2) (2026-08-10)
+
+
+### Bug Fixes
+
+* record keystrokes that produce nothing ([616ce86](https://github.com/koki-develop/Koto/commit/616ce8627e4b2e1089ae7a5bd52176475548cde3))
+
 ## [0.7.1](https://github.com/koki-develop/Koto/compare/v0.7.0...v0.7.1) (2026-08-08)
 
 
