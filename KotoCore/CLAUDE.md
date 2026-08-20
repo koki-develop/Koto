@@ -120,6 +120,21 @@ When adding another provider, follow the same three rules:
 - Set `isLearningTarget: false`. A learned entry comes back as a *dictionary* candidate on the next conversion, which would make `①` the default result for `１`.
 - Set `composingCount: .inputCount(inputData.input.count)`. It is handed to `prefixComplete(composingCount:)` on commit, so a wrong count leaves the composing text out of sync with what was committed.
 
+## Built-in supplementary dictionary
+
+`BuiltinDictionary` holds words the azooKey default dictionary is missing, handed to the converter once in `Converter.init` via `importDynamicUserDictionary`. It exists because some words are not merely ranked low but **unreachable**: `さいばん` produces 215 candidates and `採番` is in none of them, since the single kanji `採` (サイ) scores -30.0 and `DicdataStore.threshold` (-17) drops that node during lattice construction, so `採`+`番` never gets assembled either.
+
+**This is a buffer until upstream absorbs the word, not a place for Koto to grow its own dictionary.** Conversion is azooKey's job; a word in general use that is missing belongs in a PR to azooKey-dictionary. `BuiltinDictionaryTests` asserts per entry that azooKey *still* lacks it, so an upstream fix fails the test and tells you to delete the entry — which is what keeps the list from only ever growing.
+
+Two constraints shape the rest:
+
+- **Lookup is a linear scan.** `DicdataStore.getMatchDynamicUserDict` filters the whole array, once per reading prefix, on every conversion. Measured in release for one conversion of `きょうはいいてんきですね`: 3.1ms at 0 entries, 3.5ms at 200, 6.0ms at 1,000, 12.8ms at 3,000. `maxEntryCount` pins the assumption that the list stays small; crossing it means moving to a `user.louds` file under `sharedContainerURL`, which is LOUDS and therefore flat in entry count (10万 entries still converts in 1.14ms). That migration is contained inside `Converter`, so deferring it is cheap.
+- **The file route was rejected deliberately, and not for speed.** `user.louds` is a binary built against a specific `charID.chid`, so it couples to the azooKey dictionary version and then *persists on disk across app updates* — the same shape as the learning-memory shard problem documented above, in the same directory. The dynamic array is assembled at runtime from `DicdataElement` and cannot desync from anything. At this entry count that is worth more than the asymptotics.
+
+**The ruby must be built with `BuiltinDictionary.katakanaRuby`, never `String.toKatakana()`.** Koto's own `toKatakana()` is ICU's `hiraganaToKatakana`; azooKey matches with SwiftUtils' `toKatakana()`, a bare +96 over U+3041–U+3096. They disagree on four characters, in both directions — ICU leaves ゕ/ゖ as hiragana where azooKey shifts them to ヵ/ヶ, and ICU sends ゝ/ゞ to ヽ/ヾ where azooKey leaves them alone. Lookup is `ruby ==` string equality (`DicdataStore.getMatchDynamicUserDict`), so a mismatch does not fail loudly: **the word simply never appears**, with nothing in the log to say why. Importing `SwiftUtils` to borrow azooKey's function does not work either — the same-named extension in KotoCore wins silently, with no ambiguity error, so you get the ICU one while believing otherwise. `katakanaRubyMatchesAzooKeyLookup` guards this by making azooKey actually look up probe readings containing all four characters; writing the transform twice and comparing the copies would prove nothing.
+
+Per entry, `value` is chosen **by measurement, not by arithmetic**: the final ordering includes connection costs, so it does not follow from comparing raw dictionary scores. Aim for the first page rather than first place — once the user commits the word, learning takes it to the top on its own, and shoving a common word aside to get there costs more than it gains. `採番` at -10.5 sits second behind `裁判` while `自動採番` and `採番する` still lead their own readings; stronger fills `さいばんしょ` with 採番所/採番書/採番署, weaker drops `自動採番` off the list entirely.
+
 ## Candidate window
 
 `CandidateWindow/` is a self-contained candidate UI. **Do not reintroduce `IMKCandidates`** — it was removed because IMK owning the candidate state caused crashes and lifecycle bugs.

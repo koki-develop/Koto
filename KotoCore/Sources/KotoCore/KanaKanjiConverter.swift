@@ -124,6 +124,10 @@ final class Converter {
     self.saveDelay = saveDelay
     self.maxSaveDelay = maxSaveDelay
 
+    // azooKey の既定辞書に無い語を補う。`importDynamicUserDictionary` は渡された配列で
+    // 丸ごと置き換える API (追記ではない) なので、呼ぶのはここ一度きりにする。
+    self.converter.importDynamicUserDictionary(BuiltinDictionary.dicdata)
+
     // 保存だけがマージの入口ではない。前回の書き込みが中断されていると、azooKey は
     // プロセス最初の変換で復元のマージを暗黙に走らせる。そちらは `save()` を通らない
     // ので、変換を始めさせる前にここでも落としておく。
