@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/koki-develop/Koto/compare/v0.7.2...v0.8.0) (2026-08-20)
+
+
+### Features
+
+* supply words missing from the azooKey dictionary ([5dfd8bf](https://github.com/koki-develop/Koto/commit/5dfd8bf11152f38ca3e45010d23229221613d7b9))
+
 ## [0.7.2](https://github.com/koki-develop/Koto/compare/v0.7.1...v0.7.2) (2026-08-10)
 
 
